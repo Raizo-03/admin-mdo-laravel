@@ -10,7 +10,7 @@ class Admin extends Authenticatable
 {
     use Notifiable; // 
 
-    protected $table = 'admins'; // Explicitly set the table name
+    protected $table = 'Admins'; // Explicitly set the table name
     protected $primaryKey = 'admin_id';
     public $timestamps = false; // <-- Add this to disable timestamps
 
