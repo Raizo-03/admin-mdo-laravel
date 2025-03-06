@@ -17,9 +17,10 @@
 
     <!-- Right: Hi, Admin with an Icon -->
     <a href="{{ route('dashboard') }}" class="flex items-center gap-2 mr-3">
-        <img src="{{ asset('images/profile.png') }}" alt="Admin Icon" class="w-8 h-8">
-        Hi, Admin
+    <img src="{{ asset('images/profile.png') }}" alt="Admin Icon" class="w-8 h-8">
+    Hi, {{ Auth::guard('admin')->user()->username }}
     </a>
+
 </nav>
         <!-- Sidebar -->
         <aside class="bg-[#111C4E] text-white w-66 h-screen p-6 fixed">
@@ -88,10 +89,26 @@
             </nav>
             
 
+<!-- Logout Confirmation Modal (Initially Hidden) -->
+<div id="logoutModal" class="fixed inset-0 bg-black bg-opacity-50 items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center w-80">
+        <h3 class="text-xl font-semibold mb-4 text-black">Are you sure you want to logout?</h3>
+        <div class="flex justify-center gap-4">
+            <button onclick="confirmLogout()" class="bg-red-500 text-white px-4 py-2 rounded">Yes</button>
+            <button onclick="closeLogoutModal()" class="bg-gray-300 px-4 py-2 rounded">No</button>
+        </div>
+    </div>
+</div>
 
-       <h2 class="text-[17px]  mb-3 hover:bg-[#89a0df] p-1 rounded">Logout</h2>
-        </aside>
+<!-- Logout Button (Opens Modal) -->
+<h2 class="text-[17px] mb-3 hover:bg-[#89a0df] p-1 rounded cursor-pointer" onclick="showLogoutModal()">
+    Logout
+</h2>
 
+<!-- Hidden Logout Form -->
+<form id="logout-form" action="{{ route('logout') }}" method="POST" class="hidden">
+    @csrf
+</form>
 
 
 
@@ -101,3 +118,22 @@
 
 </body>
 </html>
+
+<!-- JavaScript for Modal -->
+<script>
+    function showLogoutModal() {
+        let modal = document.getElementById('logoutModal');
+        modal.classList.remove('hidden'); // Show modal
+        modal.classList.add('flex'); // Center content
+    }
+
+    function closeLogoutModal() {
+        let modal = document.getElementById('logoutModal');
+        modal.classList.remove('flex'); // Remove flex
+        modal.classList.add('hidden'); // Hide modal
+    }
+
+    function confirmLogout() {
+        document.getElementById('logout-form').submit(); // Submit the form when "Yes" is clicked
+    }
+</script>
