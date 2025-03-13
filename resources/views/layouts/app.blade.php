@@ -45,7 +45,7 @@
                     Active Users
                 </a>
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
-                    <img src="{{ asset('images/profile.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                    <img src="{{ asset('images/inactive_user.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Inactive Users
                 </a>
             </nav>
@@ -57,15 +57,15 @@
                     Requests
                 </a>
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
-                    <img src="{{ asset('images/profile.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                    <img src="{{ asset('images/confirmed.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Confirmed
                 </a>
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
-                    <img src="{{ asset('images/profile.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                    <img src="{{ asset('images/completed.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Completed
                 </a>
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
-                    <img src="{{ asset('images/profile.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                    <img src="{{ asset('images/no_show.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     No Show
                 </a>
             </nav>
@@ -77,11 +77,11 @@
                     Chat
                 </a>
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
-                    <img src="{{ asset('images/profile.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                    <img src="{{ asset('images/feedback.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Feedback
                 </a>
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
-                    <img src="{{ asset('images/profile.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                    <img src="{{ asset('images/announcement.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Announcements
                 </a>
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
