@@ -22,7 +22,7 @@ Route::get('/dashboard', [UserController::class, 'countAdmins']);
 Route::get('/dashboard', [AppointmentController::class, 'countAppointments']);
 Route::get('/dashboard', [FeedbackController::class, 'countFeedbacks']);
 Route::get('/dashboard', [AnnouncementController::class, 'countAnnouncements']);
-Route::get('/dashboard', [MessageController::class, 'countUnreadMessages']);
+Route::get('/dashboard', [MessageController::class, 'getUnreadMessageCount']); // Updated function name
 Route::get('/appointments-data', [AppointmentController::class, 'getAppointmentsData']);
 Route::get('/registrations-data', [UserController::class, 'getMonthlyUserRegistrations']);
 

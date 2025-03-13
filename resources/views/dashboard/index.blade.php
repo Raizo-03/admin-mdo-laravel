@@ -79,7 +79,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\Message::count() }}</p>
+            <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\Message::where('status', 'unread')->count() }}</p>
         </div>
 
         <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">

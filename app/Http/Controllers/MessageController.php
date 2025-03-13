@@ -8,9 +8,9 @@ use App\Models\Message;
 
 class MessageController extends Controller
 {
-    public function countUnreadMessages()
+    public function getUnreadMessageCount() // Changed function name
     {
-        $unreadMessages = Message::where('status', 'unread')->count(); // Count only unread messages
-        return view('dashboard.index', compact('unreadMessages')); // Pass the count to the view
+        $unreadMessages = Message::where('status', 'unread')->count();
+        return view('dashboard.index', compact('unreadMessages'));
     }
 }
