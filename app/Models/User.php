@@ -10,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory;
+    protected $table = 'Users'; // Explicitly define table name (optional if it matches Laravel convention)
 
     protected $fillable = ['username', 'password'];
 
