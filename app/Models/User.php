@@ -10,9 +10,12 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use HasFactory;
-    protected $table = 'Users'; // Explicitly define table name (optional if it matches Laravel convention)
+    public $timestamps = false; // Disable automatic timestamps
 
-    protected $fillable = ['username', 'password'];
+    protected $table = 'Users'; // Explicitly define table name (optional if it matches Laravel convention)
+    protected $primaryKey = 'user_id'; // Set the correct primary key
+
+    protected $fillable = ['student_id', 'username', 'password', 'status']; // Ensure student_id and status are fillable
 
     // Tell Laravel to use "username" instead of "email" for authentication
     public function getAuthIdentifierName()

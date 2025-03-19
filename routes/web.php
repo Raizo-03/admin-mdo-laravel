@@ -8,6 +8,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AnnouncementController;;
 use App\Http\Controllers\MessageController;
+use App\Livewire\StudentsTable;
 
 
 // Redirect root URL to login
@@ -18,7 +19,7 @@ Route::get('/', function () {
 
 // Dashboard routers
 Route::get('/dashboard', [UserController::class, 'countUsers']);
-Route::get('/dashboard', [UserController::class, 'countAdmins']);
+Route::get('/dashboard', [AdminController::class, 'countAdmins']);
 Route::get('/dashboard', [AppointmentController::class, 'countAppointments']);
 Route::get('/dashboard', [FeedbackController::class, 'countFeedbacks']);
 Route::get('/dashboard', [AnnouncementController::class, 'countAnnouncements']);
@@ -40,5 +41,19 @@ Route::middleware(['web'])->group(function () {
         })->name('dashboard');
     });
 });
+
+
+//Routing for User Management
+Route::prefix('users')->group(function () {
+    Route::get('/users/students', [UserController::class, 'students'])->name('users.students.index');
+    Route::get('/users/admins', [AdminController::class, 'admins'])->name('users.admins.index');
+    // Route::get('/doctors', [DoctorController::class, 'index'])->name('users.doctors.index');
+    // Route::get('/nurses', [NurseController::class, 'index'])->name('users.nurses.index');
+});
+
+//Student Management Page Routing
+Route::post('/users/update-status', [UserController::class, 'updateStatus'])->name('users.updateStatus');
+Route::get('/students', StudentsTable::class)->name('students.index');
+
 
 ?>

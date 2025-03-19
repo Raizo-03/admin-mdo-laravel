@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Laravel App')</title>
     <script src="https://cdn.tailwindcss.com"></script>
+     @livewireStyles
 </head>
 <body class="bg-[#111C4E] min-h-screen">
 
@@ -40,13 +41,13 @@
 
             <h2 class="text-[17px] font-bold mb-3">User Management</h2>
             <nav class="flex flex-col gap-3 mb-6">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                <a href="{{ route('users.students.index') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/usermanager_icon.png') }}" alt="Clinic Logo" class="w-5 h-5">
-                    Active Users
+                    Students
                 </a>
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                <a href="{{ route('users.admins.index') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/inactive_user.png') }}" alt="Clinic Logo" class="w-5 h-5">
-                    Inactive Users
+                    Admins
                 </a>
             </nav>
 
@@ -137,5 +138,6 @@
         document.getElementById('logout-form').submit(); // Submit the form when "Yes" is clicked
     }
 </script>
+@livewireScripts
 </body>
 </html>

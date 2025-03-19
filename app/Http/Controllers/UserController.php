@@ -9,12 +9,41 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-    public function countAdmins()
+    public function countUsers()
     {
         $totalUsers = User::count(); // Get total number of users
         return view('dashboard.index', compact('totalUsers')); // Pass to view
     }
 
+    public function students()
+    {
+    $students = User::all(); // Get all users (since they are all students)
+    return view('dashboard.users.students.index', compact('students'));
+    }
+
+
+    
+    
+    public function updateStatus(Request $request) {
+        \Log::info($request->all()); // Debugging log
+
+        $user = User::where('student_id', $request->student_id)->first();
+
+        if (!$user) {
+            return back()->with('error', 'User not found');
+        }
+
+        // Store "active" or "inactive" as a string
+        $user->status = ($request->status === "active") ? "active" : "inactive";
+        
+        $user->save();
+
+        return back()->with('success', 'Status updated successfully');
+    }
+
+
+    
+    
 
     public function getMonthlyUserRegistrations(Request $request)
     {
