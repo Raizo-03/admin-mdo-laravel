@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\FeedbackController;
@@ -54,6 +55,7 @@ Route::prefix('users')->group(function () {
 //Student Management Page Routing
 Route::post('/users/update-status', [UserController::class, 'updateStatus'])->name('users.updateStatus');
 Route::get('/students', StudentsTable::class)->name('students.index');
+Route::get('/user-profile/{user_id}', [UserProfileController::class, 'show']);
 
 
 ?>

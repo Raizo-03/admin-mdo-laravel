@@ -42,13 +42,14 @@
                     </td>
                     <td class="px-4 py-3 flex gap-2">
                         <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
-                            onclick="viewUserModal('{{ $student->id }}', '{{ $student->student_id }}', '{{ $student->first_name }}', '{{ $student->last_name }}', '{{ $student->umak_email }}', '{{ $student->status }}')">
+                            onclick="viewUserModal('{{ $student->user_id }}', '{{ $student->student_id }}', '{{ $student->first_name }}', '{{ $student->last_name }}', '{{ $student->umak_email }}', '{{ $student->status }}')">
                             👁 View
                         </button>
                         <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-md"
-                            onclick="openStatusModal('{{ $student->id }}', '{{ $student->first_name }}', '{{ $student->status }}', '{{ $student->student_id }}')">
-                            ⚡ Change Status
+                            onclick="openStatusModal('{{ $student->user_id }}', '{{ $student->first_name }}', '{{ $student->status }}', '{{ $student->student_id }}')">
+                            ⚡Status
                         </button>
+                        
                     </td>
                 </tr>
                 @endforeach
@@ -81,18 +82,24 @@
 
 
     <!-- View User Modal -->
-    <div id="viewModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-            <h2 class="text-gray-900 text-xl font-semibold mb-4">Student Details</h2>
-            <p><strong>Student ID:</strong> <span id="viewStudentId"></span></p>
-            <p><strong>Name:</strong> <span id="viewStudentName"></span></p>
-            <p><strong>Email:</strong> <span id="viewStudentEmail"></span></p>
-            <p><strong>Status:</strong> <span id="viewStudentStatus"></span></p>
-            <div class="mt-4 text-right">
-                <button class="px-4 py-2 bg-gray-600 text-white rounded-md" onclick="closeViewModal()">Close</button>
+        <!-- View User Modal -->
+        <div id="viewModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 class="text-gray-900 text-xl font-semibold mb-4">Student Details</h2>
+                <p><strong>Student ID:</strong> <span id="viewStudentId"></span></p>
+                <p><strong>Name:</strong> <span id="viewStudentName"></span></p>
+                <p><strong>Email:</strong> <span id="viewStudentEmail"></span></p>
+                <p><strong>Contact Number:</strong> <span id="viewContactNumber"></span></p>
+                <p><strong>Address:</strong> <span id="viewAddress"></span></p>
+                <p><strong>Guardian Contact:</strong> <span id="viewGuardianContact"></span></p>
+                <p><strong>Guardian Address:</strong> <span id="viewGuardianAddress"></span></p>
+                <p><strong>Status:</strong> <span id="viewStudentStatus"></span></p>
+                <div class="mt-4 text-right">
+                    <button class="px-4 py-2 bg-gray-600 text-white rounded-md" onclick="closeViewModal()">Close</button>
+                </div>
             </div>
         </div>
-    </div>
+
 
     <!-- Change Status Modal -->
     <div id="statusModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
@@ -147,14 +154,34 @@
 
     // View User Modal
  function viewUserModal(id, studentId, firstName, lastName, email, status) {
-    document.getElementById('viewStudentId').innerText = studentId;
-    document.getElementById('viewStudentName').innerText = firstName + " " + lastName;
-    document.getElementById('viewStudentEmail').innerText = email;
-    
-    // Ensure correct status is displayed
-    document.getElementById('viewStudentStatus').innerText = status == "active" ? "Active" : "Inactive";
-    
-    document.getElementById('viewModal').classList.remove('hidden');
+    console.log("Fetching user details for userId:", id);
+
+    fetch(`/user-profile/${id}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.debug('Fetched UserProfile:', data);
+            document.getElementById('viewStudentId').innerText = studentId;
+            document.getElementById('viewStudentName').innerText = firstName + " " + lastName;
+            document.getElementById('viewStudentEmail').innerText = email;
+            document.getElementById('viewStudentStatus').innerText = status === "active" ? "Active" : "Inactive";
+
+            // Display UserProfile Info
+            document.getElementById('viewContactNumber').innerText = data.contact_number || 'N/A';
+            document.getElementById('viewAddress').innerText = data.address || 'N/A';
+            document.getElementById('viewGuardianContact').innerText = data.guardian_contact_number || 'N/A';
+            document.getElementById('viewGuardianAddress').innerText = data.guardian_address || 'N/A';
+
+            document.getElementById('viewModal').classList.remove('hidden');
+        })
+        .catch(error => {
+            console.error('Error fetching user profile:', error);
+            alert('Failed to fetch user profile.');
+        });
 }
 
     function closeViewModal() {
