@@ -49,7 +49,10 @@
                             onclick="openStatusModal('{{ $student->user_id }}', '{{ $student->first_name }}', '{{ $student->status }}', '{{ $student->student_id }}')">
                             ⚡Status
                         </button>
-                        
+                        <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md"
+                            onclick="openEditModal('{{ $student->user_id }}')">
+                            ✏ Edit
+                        </button>
                     </td>
                 </tr>
                 @endforeach
@@ -121,7 +124,38 @@
 
 
         </div>
+        
     </div>
+
+
+            <!-- Edit User Profile Modal -->
+        <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                <h2 class="text-gray-900 text-xl font-semibold mb-4">Edit User Profile</h2>
+                <form id="editForm" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" id="editUserId" name="user_id">
+                    
+                    <label class="block text-gray-700">Contact Number</label>
+                    <input type="text" id="editContactNumber" name="contact_number" class="w-full px-3 py-2 border rounded-md">
+
+                    <label class="block text-gray-700 mt-2">Address</label>
+                    <input type="text" id="editAddress" name="address" class="w-full px-3 py-2 border rounded-md">
+
+                    <label class="block text-gray-700 mt-2">Guardian Contact Number</label>
+                    <input type="text" id="editGuardianContact" name="guardian_contact_number" class="w-full px-3 py-2 border rounded-md">
+
+                    <label class="block text-gray-700 mt-2">Guardian Address</label>
+                    <input type="text" id="editGuardianAddress" name="guardian_address" class="w-full px-3 py-2 border rounded-md">
+
+                    <div class="mt-4 flex justify-end space-x-2">
+                        <button type="button" class="px-4 py-2 bg-gray-600 text-white rounded-md" onclick="closeEditModal()">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 </div>
 
 
@@ -199,4 +233,29 @@
     function closeStatusModal() {
         document.getElementById('statusModal').classList.add('hidden');
     }
+        function openEditModal(userId) {
+        console.log("Fetching user profile for editing:", userId);
+
+        fetch(`/user-profile/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('editUserId').value = userId;
+                document.getElementById('editContactNumber').value = data.contact_number || '';
+                document.getElementById('editAddress').value = data.address || '';
+                document.getElementById('editGuardianContact').value = data.guardian_contact_number || '';
+                document.getElementById('editGuardianAddress').value = data.guardian_address || '';
+
+                document.getElementById('editForm').action = `/user-profile/${userId}`;
+                document.getElementById('editModal').classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error fetching user profile:', error);
+                alert('Failed to load user profile.');
+            });
+    }
+
+    function closeEditModal() {
+        document.getElementById('editModal').classList.add('hidden');
+    }
+
 </script>

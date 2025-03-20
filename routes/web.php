@@ -55,7 +55,8 @@ Route::prefix('users')->group(function () {
 //Student Management Page Routing
 Route::post('/users/update-status', [UserController::class, 'updateStatus'])->name('users.updateStatus');
 Route::get('/students', StudentsTable::class)->name('students.index');
-Route::get('/user-profile/{user_id}', [UserProfileController::class, 'show']);
+Route::get('/user-profile/{user_id}', action: [UserProfileController::class, 'show']);
+Route::put('/user-profile/{id}', [UserProfileController::class, 'update']);
 
 
 ?>
