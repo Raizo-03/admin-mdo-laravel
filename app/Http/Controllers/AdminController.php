@@ -7,6 +7,8 @@ use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+
 
 class AdminController extends Controller
 {
@@ -63,26 +65,19 @@ public function profile()
     return view('dashboard.users.admins.profile', compact('admin'));
 }
 
-public function updateProfilePicture(Request $request)
+public function uploadProfilePicture(Request $request)
 {
-    // Validate image upload
     $request->validate([
         'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
     ]);
 
-    // Get the logged-in admin
     $admin = Auth::guard('admin')->user();
 
-    // Delete old profile picture if it exists
-    if ($admin->profile_picture) {
-        Storage::delete('public/' . $admin->profile_picture);
-    }
+    // Upload to Cloudinary and get URL
+    $uploadedFileUrl = Cloudinary::upload($request->file('profile_picture')->getRealPath())->getSecurePath();
 
-    // Store the new profile picture
-    $filePath = $request->file('profile_picture')->store('profile_pictures', 'public');
-
-    // Update the admin's profile
-    $admin->update(['profile_picture' => $filePath]);
+    // Save the URL to the database
+    $admin->update(['profile_picture' => $uploadedFileUrl]);
 
     return redirect()->back()->with('success', 'Profile picture updated successfully!');
 }
