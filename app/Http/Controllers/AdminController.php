@@ -43,7 +43,33 @@ class AdminController extends Controller
     }
 
     public function updateAdmin(Request $request, $admin_id)
-{    $admin = Auth::guard('admin')->user(); // Get the logged-in admin
+{
+    $admin = Admin::findOrFail($admin_id);
+
+    $admin->username = $request->username;
+    $admin->email = $request->email;
+
+    // Only update password if it's provided
+    if (!empty($request->password)) {
+        $admin->password = Hash::make($request->password);
+    }
+
+    $admin->save();
+
+    return response()->json(['success' => true, 'message' => 'Admin updated successfully']);
+}
+
+public function profile()
+{
+    $admin = Auth::guard('admin')->user(); // Get the currently logged-in admin
+    return view('dashboard.users.admins.profile', compact('admin'));
+}
+
+
+
+
+public function updateProfilePicture(Request $request) {
+    $admin = Auth::guard('admin')->user(); // Get the logged-in admin
 
     Log::info('Received profile picture update request for admin ID: ' . $admin->id);
 
@@ -85,4 +111,5 @@ class AdminController extends Controller
         return back()->withErrors(['profile_picture' => 'Failed to upload profile picture. Please try again.']);
     }
 }
+
 }
