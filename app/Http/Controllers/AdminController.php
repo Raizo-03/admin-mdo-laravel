@@ -69,27 +69,39 @@ public function profile()
 
 
 public function updateProfilePicture(Request $request) {
-  
-    $request->validate([
-        'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+   // Validate the uploaded image
+   $request->validate([
+    'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+]);
+
+try {
+    // Upload the image to Cloudinary
+    $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
+        'folder' => 'profile_pictures'
     ]);
 
-    try {
-        $uploadedFileUrl = Cloudinary::upload($request->file('profile_picture')->getRealPath())->getSecurePath();
-        
-        // Check if Cloudinary returned a valid URL
-        if (!$uploadedFileUrl) {
-            return back()->with('error', 'Failed to upload image to Cloudinary.');
-        }
+    // Retrieve secure URL and public ID
+    $uploadedFileUrl = $uploadedFile->getSecurePath();
+    $publicId = $uploadedFile->getPublicId();
 
-        // Save the Cloudinary URL to the database
-        $admin = auth()->user();
-        $admin->profile_picture = $uploadedFileUrl;
-        $admin->save();
-
-        return back()->with('success', 'Profile picture updated successfully!');
-    } catch (\Exception $e) {
-        return back()->with('error', 'Cloudinary upload failed: ' . $e->getMessage());
+    // Check if Cloudinary returned a valid URL
+    if (!$uploadedFileUrl) {
+        return back()->with('error', 'Failed to upload image to Cloudinary.');
     }
+
+    // Update the authenticated user's profile picture in the database
+    $admin = auth()->user();
+    if (!$admin) {
+        return back()->with('error', 'User not authenticated.');
+    }
+
+    $admin->profile_picture = $uploadedFileUrl;
+    $admin->cloudinary_public_id = $publicId; // Store public ID for future reference
+    $admin->save();
+
+    return back()->with('success', 'Profile picture updated successfully!');
+} catch (\Exception $e) {
+    return back()->with('error', 'Cloudinary upload failed: ' . $e->getMessage());
+}
 }
 }
