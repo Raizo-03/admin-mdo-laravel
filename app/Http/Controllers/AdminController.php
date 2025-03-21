@@ -68,7 +68,8 @@ public function profile()
 public function updateProfilePicture(Request $request) {
     $admin = Auth::guard('admin')->user(); // Get the logged-in admin
 
-    // Debugging: Check if a file is received
+    Log::info('Full request data:', $request->all());
+
     if (!$request->hasFile('profile_picture')) {
         Log::error('No file uploaded.');
         return back()->withErrors(['profile_picture' => 'No file uploaded.']);
@@ -76,15 +77,11 @@ public function updateProfilePicture(Request $request) {
 
     $uploadedFile = $request->file('profile_picture');
 
-    // Debugging: Check file details
-    Log::info('Uploaded file details: ', $uploadedFile->toArray());
-
-    // Ensure the uploaded file is valid
     if (!$uploadedFile->isValid()) {
         Log::error('Uploaded file is not valid.');
         return back()->withErrors(['profile_picture' => 'Uploaded file is not valid.']);
     }
-
+    
     try {
         // Upload to Cloudinary
         $uploadedFileUrl = Cloudinary::upload($uploadedFile->getRealPath(), [
