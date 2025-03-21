@@ -74,10 +74,10 @@ public function updateProfilePicture(Request $request) {
 
     $uploadedFile = $request->file('profile_picture');
 
-    $uploadedFileUrl = Cloudinary::upload($uploadedFile->getRealPath())->getSecurePath(); // Upload to Cloudinary
+        $uploadedFileUrl = Cloudinary::upload($request->file('profile_picture')->getRealPath())->getSecurePath();
+        $admin->profile_picture = $uploadedFileUrl; // Store full Cloudinary URL
+        $admin->save();
 
-    $admin->profile_picture = $uploadedFileUrl; // Save the URL to database
-    $admin->save();
 
     return redirect()->route('admin.profile')->with('success', 'Profile picture updated successfully');
 }
