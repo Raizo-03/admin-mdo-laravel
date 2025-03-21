@@ -14,8 +14,9 @@
         <!-- Profile Image -->
         <div class="flex flex-col items-center space-y-3">
             <div class="w-40 h-40 rounded-full border-4 border-gray-400 overflow-hidden">
-                    <img src="{{ $admin->profile_picture ? $admin->profile_picture : asset('images/default-profile.png') }}" 
-                        alt="Profile Picture" class="w-full h-full object-cover rounded-full">
+            <img src="{{ Str::startsWith($admin->profile_picture, 'http') ? $admin->profile_picture : asset('storage/' . $admin->profile_picture) }}" 
+                alt="Profile Picture" class="w-full h-full object-cover rounded-full">
+
 
             </div>
 
