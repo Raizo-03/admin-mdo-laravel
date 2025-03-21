@@ -62,4 +62,11 @@ Route::get('/admin-profile/{id}', [AdminController::class, 'show']);
 Route::put('/admin-profile/update/{id}', [AdminController::class, 'updateAdmin']);
 
 
+//Admin Profile routing
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+});
+Route::post('/admin/profile/update', [AdminController::class, 'updateProfilePicture'])->name('admin.profile.update');
+
+
 ?>

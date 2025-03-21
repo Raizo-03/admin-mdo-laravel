@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -53,6 +55,36 @@ class AdminController extends Controller
     $admin->save();
 
     return response()->json(['success' => true, 'message' => 'Admin updated successfully']);
+}
+
+public function profile()
+{
+    $admin = Auth::guard('admin')->user(); // Get the currently logged-in admin
+    return view('dashboard.users.admins.profile', compact('admin'));
+}
+
+public function updateProfilePicture(Request $request)
+{
+    // Validate image upload
+    $request->validate([
+        'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
+
+    // Get the logged-in admin
+    $admin = Auth::guard('admin')->user();
+
+    // Delete old profile picture if it exists
+    if ($admin->profile_picture) {
+        Storage::delete('public/' . $admin->profile_picture);
+    }
+
+    // Store the new profile picture
+    $filePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+
+    // Update the admin's profile
+    $admin->update(['profile_picture' => $filePath]);
+
+    return redirect()->back()->with('success', 'Profile picture updated successfully!');
 }
 
 

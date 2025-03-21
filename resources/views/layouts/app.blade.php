@@ -18,7 +18,7 @@
     </a>
 
     <!-- Right: Hi, Admin with an Icon -->
-    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 mr-3">
+    <a href="{{ route('admin.profile') }}" class="flex items-center gap-2 mr-3">
     <img src="{{ asset('images/profile.png') }}" alt="Admin Icon" class="w-8 h-8">
     Hi, {{ Auth::guard('admin')->user()->username }}
     </a>
@@ -34,10 +34,11 @@
                     <img src="{{ asset('images/dashboard_icon.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Home
                 </a>
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
-                    <img src="{{ asset('images/profile.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                <a href="{{ route('admin.profile') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                    <img src="{{ asset('images/profile.png') }}" alt="Profile Icon" class="w-5 h-5">
                     Profile
                 </a>
+
             </nav>
 
             <h2 class="text-[17px] font-bold mb-3">User Management</h2>
