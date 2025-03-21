@@ -43,64 +43,46 @@ class AdminController extends Controller
     }
 
     public function updateAdmin(Request $request, $admin_id)
-{
-    $admin = Admin::findOrFail($admin_id);
+{    $admin = Auth::guard('admin')->user(); // Get the logged-in admin
 
-    $admin->username = $request->username;
-    $admin->email = $request->email;
+    Log::info('Received profile picture update request for admin ID: ' . $admin->id);
 
-    // Only update password if it's provided
-    if (!empty($request->password)) {
-        $admin->password = Hash::make($request->password);
-    }
-
-    $admin->save();
-
-    return response()->json(['success' => true, 'message' => 'Admin updated successfully']);
-}
-
-public function profile()
-{
-    $admin = Auth::guard('admin')->user(); // Get the currently logged-in admin
-    return view('dashboard.users.admins.profile', compact('admin'));
-}
-
-public function updateProfilePicture(Request $request) {
-    $admin = Auth::guard('admin')->user(); // Get the logged-in admin
-
-    Log::info('Full request data:', $request->all());
-
-    if (!$request->hasFile('profile_picture')) {
-        Log::error('No file uploaded.');
-        return back()->withErrors(['profile_picture' => 'No file uploaded.']);
-    }
+    // Validate the file input
+    $request->validate([
+        'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
     $uploadedFile = $request->file('profile_picture');
 
     if (!$uploadedFile->isValid()) {
-        Log::error('Uploaded file is not valid.');
+        Log::error('Invalid file upload attempt.');
         return back()->withErrors(['profile_picture' => 'Uploaded file is not valid.']);
     }
-    
+
     try {
-        // Upload to Cloudinary
+        // Delete old profile picture if it exists (Cloudinary only)
+        if (!empty($admin->profile_picture)) {
+            $publicId = pathinfo(parse_url($admin->profile_picture, PHP_URL_PATH), PATHINFO_FILENAME);
+            Cloudinary::destroy('profile_pictures/' . $publicId);
+            Log::info('Old profile picture deleted: ' . $admin->profile_picture);
+        }
+
+        // Upload new profile picture to Cloudinary
         $uploadedFileUrl = Cloudinary::upload($uploadedFile->getRealPath(), [
-            'folder' => 'profile_pictures' // Optional: Store in a specific folder
+            'folder' => 'profile_pictures', // Store images in this folder on Cloudinary
         ])->getSecurePath();
 
-        // Update the admin profile picture in the database
+        // Update the profile picture in the database
         $admin->profile_picture = $uploadedFileUrl;
         $admin->save();
 
-        Log::info('Profile picture uploaded successfully: ' . $uploadedFileUrl);
+        Log::info('New profile picture uploaded successfully: ' . $uploadedFileUrl);
 
         return redirect()->route('admin.profile')->with('success', 'Profile picture updated successfully.');
     } catch (\Exception $e) {
-        // Log the error
         Log::error('Cloudinary upload failed: ' . $e->getMessage());
 
         return back()->withErrors(['profile_picture' => 'Failed to upload profile picture. Please try again.']);
     }
 }
-
 }
