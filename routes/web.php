@@ -57,6 +57,9 @@ Route::post('/users/update-status', [UserController::class, 'updateStatus'])->na
 Route::get('/students', StudentsTable::class)->name('students.index');
 Route::get('/user-profile/{user_id}', action: [UserProfileController::class, 'show']);
 Route::put('/user-profile/{id}', [UserProfileController::class, 'update']);
+Route::put('/admin/update/{id}', [AdminController::class, 'update'])->name('admin.update');
+Route::get('/admin-profile/{id}', [AdminController::class, 'show']);
+Route::put('/admin-profile/update/{id}', [AdminController::class, 'updateAdmin']);
 
 
 ?>
