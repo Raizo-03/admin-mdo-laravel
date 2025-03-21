@@ -22,7 +22,6 @@
             <!-- Upload Button -->
             <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
                 @csrf
-                @method('POST')
                 <input type="file" name="profile_picture" id="fileInput" class="hidden" onchange="this.form.submit()">
                 <label for="fileInput" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition">
                     Upload Image
