@@ -75,28 +75,22 @@ public function updateProfilePicture(Request $request) {
 ]);
 
 try {
-    // Upload the image to Cloudinary
-    $uploadedFile = Cloudinary::upload($request->file('profile_picture')->getRealPath(), [
-        'folder' => 'profile_pictures'
-    ]);
+    // Upload the image to Cloudinary under the "profile_pictures" folder
+    $imagePath = $request->file('profile_picture')->storeOnCloudinary('profile_pictures');
 
-    // Retrieve secure URL and public ID
-    $uploadedFileUrl = $uploadedFile->getSecurePath();
-    $publicId = $uploadedFile->getPublicId();
+    // Get the uploaded file's URL and public ID
+    $uploadedFileUrl = $imagePath->getSecurePath();
+    $publicId = $imagePath->getPublicId();
 
-    // Check if Cloudinary returned a valid URL
+    // Ensure Cloudinary returned a valid URL
     if (!$uploadedFileUrl) {
         return back()->with('error', 'Failed to upload image to Cloudinary.');
     }
 
-    // Update the authenticated user's profile picture in the database
+    // Save the Cloudinary URL and public ID to the database
     $admin = auth()->user();
-    if (!$admin) {
-        return back()->with('error', 'User not authenticated.');
-    }
-
     $admin->profile_picture = $uploadedFileUrl;
-    $admin->cloudinary_public_id = $publicId; // Store public ID for future reference
+    $admin->cloudinary_public_id = $publicId; // Store public ID for future deletions
     $admin->save();
 
     return back()->with('success', 'Profile picture updated successfully!');
