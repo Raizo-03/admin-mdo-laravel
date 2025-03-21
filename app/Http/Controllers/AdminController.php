@@ -65,7 +65,7 @@ public function profile()
     return view('dashboard.users.admins.profile', compact('admin'));
 }
 
-public function uploadProfilePicture(Request $request)
+public function updateProfilePicture(Request $request)
 {
     $request->validate([
         'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
