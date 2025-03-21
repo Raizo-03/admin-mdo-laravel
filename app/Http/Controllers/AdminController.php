@@ -65,21 +65,27 @@ public function profile()
     return view('dashboard.users.admins.profile', compact('admin'));
 }
 
-public function updateProfilePicture(Request $request)
-{
+public function updateProfilePicture(Request $request) {
     $request->validate([
-        'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        'profile_picture' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
 
+    // Ensure a file is uploaded before proceeding
+    if (!$request->hasFile('profile_picture')) {
+        return redirect()->back()->with('error', 'No file uploaded.');
+    }
+
+    $file = $request->file('profile_picture');
+
+    // Upload to Cloudinary
+    $uploadedFileUrl = Cloudinary::upload($file->getRealPath())->getSecurePath();
+
+    // Update profile picture in the database
     $admin = Auth::guard('admin')->user();
+    $admin->profile_picture = $uploadedFileUrl;
+    $admin->save();
 
-    // Upload to Cloudinary and get URL
-    $uploadedFileUrl = Cloudinary::upload($request->file('profile_picture')->getRealPath())->getSecurePath();
-
-    // Save the URL to the database
-    $admin->update(['profile_picture' => $uploadedFileUrl]);
-
-    return redirect()->back()->with('success', 'Profile picture updated successfully!');
+    return redirect()->back()->with('success', 'Profile picture updated successfully.');
 }
 
 
