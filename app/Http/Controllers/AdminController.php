@@ -68,16 +68,16 @@ public function profile()
 public function updateProfilePicture(Request $request) {
     $admin = Auth::guard('admin')->user(); // Get the logged-in admin
 
-    if ($request->hasFile('profile_picture')) {
-        // If file is uploaded, process it
-        $uploadedFile = $request->file('profile_picture');
-
-        // You can store it on Cloudinary or locally based on your requirement
-        $uploadedFileUrl = Cloudinary::upload($uploadedFile->getRealPath())->getSecurePath(); // For Cloudinary
-
-        $admin->profile_picture = $uploadedFileUrl; // Save the URL to database
-        $admin->save();
+    if (!$request->hasFile('profile_picture')) {
+        return back()->withErrors(['profile_picture' => 'No file uploaded.']);
     }
+
+    $uploadedFile = $request->file('profile_picture');
+
+    $uploadedFileUrl = Cloudinary::upload($uploadedFile->getRealPath())->getSecurePath(); // Upload to Cloudinary
+
+    $admin->profile_picture = $uploadedFileUrl; // Save the URL to database
+    $admin->save();
 
     return redirect()->route('admin.profile')->with('success', 'Profile picture updated successfully');
 }
