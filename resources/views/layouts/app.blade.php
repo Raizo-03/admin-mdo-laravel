@@ -6,6 +6,7 @@
     <title>@yield('title', 'Laravel App')</title>
     <script src="https://cdn.tailwindcss.com"></script>
      @livewireStyles
+     <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
 </head>
 <body class="bg-[#111C4E] min-h-screen">
 
