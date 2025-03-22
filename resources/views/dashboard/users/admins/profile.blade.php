@@ -9,27 +9,29 @@
         <h1 class="text-2xl font-bold text-white">Admin Profile</h1>
     </div>
 
+    <!-- Error Message Display -->
+    @if(session('error'))
+        <div class="bg-red-500 text-white p-4 rounded-md mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <!-- Profile Container -->
     <div class="flex items-center space-x-6 bg-white shadow-lg rounded-xl p-6 w-full">
         <!-- Profile Image -->
         <div class="flex flex-col items-center space-y-3">
             <div class="w-40 h-40 rounded-full border-4 border-gray-400 overflow-hidden">
-            <img src="{{ $admin->profile_picture }}" alt="Profile Picture" class="w-full h-full object-cover rounded-full">
-
-
-
+            <img src="{{ $admin->profile_picture ?? 'https://via.placeholder.com/150' }}" alt="Profile Picture" class="w-full h-full object-cover rounded-full">
             </div>
 
-            <!-- Upload Button -->
-            <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <input type="file" name="profile_picture" id="fileInput" class="hidden" onchange="this.form.submit()">
-                <label for="fileInput" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition">
-                    Upload Image
-                </label>
-            </form>
-
-
+                            <!-- Upload Button -->
+                <form action="{{ route('admin.profile.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <input type="file" name="profile_picture" id="fileInput" class="hidden" onchange="this.form.submit()">
+                    <label for="fileInput" class="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition">
+                        Upload Image
+                    </label>
+                </form>
         </div>
 
         <!-- Profile Info -->

@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Log;
 
+
 class AdminController extends Controller
 {
     public function countAdmins()
@@ -67,35 +68,50 @@ public function profile()
 
 
 
+public function updateProfilePicture(Request $request)
+{
+    // Validate the uploaded image
+    $request->validate([
+        'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+    ]);
 
-public function updateProfilePicture(Request $request) {
-   // Validate the uploaded image
-   $request->validate([
-    'profile_picture' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-]);
+    try {
+        // Check if user is authenticated
+        $admin = auth('admin')->user();
 
-try {
-    // Upload the image to Cloudinary under the "profile_pictures" folder
-    $imagePath = $request->file('profile_picture')->storeOnCloudinary('profile_pictures');
+        if (!$admin) {
+            return redirect()->route('login')->with('error', 'You must be logged in to update your profile picture.');
+        }
 
-    // Get the uploaded file's URL and public ID
-    $uploadedFileUrl = $imagePath->getSecurePath();
-    $publicId = $imagePath->getPublicId();
+        // Check if the file is uploaded
+        $file = $request->file('profile_picture');
+        if ($file && $file->isValid()) {
+            // Use the Cloudinary URL from .env directly
+            $cloudinary = new \Cloudinary\Cloudinary(env('CLOUDINARY_URL'));
+            
+            // Upload the file using the uploadApi with folder specification
+            $uploadResult = $cloudinary->uploadApi()->upload($file->getRealPath(), [
+                'resource_type' => 'auto',
+                'folder' => 'profile_pictures'  // Specify the folder here
+            ]);
+            
+            // Extract the URL from the result
+            $uploadedFileUrl = $uploadResult['secure_url'];
+            
+            // Only save the profile_picture URL to the database
+            $admin->profile_picture = $uploadedFileUrl;
+            $admin->save();
 
-    // Ensure Cloudinary returned a valid URL
-    if (!$uploadedFileUrl) {
-        return back()->with('error', 'Failed to upload image to Cloudinary.');
+            return back()->with('success', 'Profile picture updated successfully!');
+        } else {
+            return back()->with('error', 'No valid file uploaded.');
+        }
+    } catch (\Exception $e) {
+        // Log detailed error information
+        Log::error('Cloudinary upload error: ' . $e->getMessage());
+        Log::error($e->getTraceAsString());
+        
+        return back()->with('error', 'Cloudinary upload failed: ' . $e->getMessage());
     }
-
-    // Save the Cloudinary URL and public ID to the database
-    $admin = auth()->user();
-    $admin->profile_picture = $uploadedFileUrl;
-    $admin->cloudinary_public_id = $publicId; // Store public ID for future deletions
-    $admin->save();
-
-    return back()->with('success', 'Profile picture updated successfully!');
-} catch (\Exception $e) {
-    return back()->with('error', 'Cloudinary upload failed: ' . $e->getMessage());
-}
 }
 }
