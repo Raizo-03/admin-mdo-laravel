@@ -87,7 +87,7 @@
                     <img src="{{ asset('images/announcement.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Announcements
                 </a>
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                    <a href="{{ route('trivia.index') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/trivia_icon.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Trivia
                 </a>

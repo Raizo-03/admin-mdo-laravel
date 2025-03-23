@@ -10,6 +10,7 @@ use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AnnouncementController;;
 use App\Http\Controllers\MessageController;
 use App\Livewire\StudentsTable;
+use App\Http\Controllers\TriviaController;
 
 
 // Redirect root URL to login
@@ -68,5 +69,7 @@ Route::middleware(['auth:admin'])->group(function () {
 });
 Route::post('/admin/profile/update', [AdminController::class, 'updateProfilePicture'])->name('admin.profile.update');
 
+//Content Management / Trivia Routing
+Route::get('/dashboard/contentmanagement/trivia', [TriviaController::class, 'index'])->name('trivia.index');
 
 ?>
