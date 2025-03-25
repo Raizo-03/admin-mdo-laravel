@@ -13,4 +13,6 @@ class Feedback extends Model
     use HasFactory;
     protected $table = 'Feedback'; // Explicitly define table name (optional if it matches Laravel convention)
 
+    protected $fillable = ['service_type', 'rating', 'message', 'created_at']; // Add this line
+
 }
