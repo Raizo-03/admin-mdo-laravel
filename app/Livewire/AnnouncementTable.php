@@ -56,20 +56,24 @@ class AnnouncementTable extends Component
 
     public function saveAnnouncement()
     {
-        // Check if user is authenticated
-        $admin = auth()->user(); // Or use auth('admin')->user() if you have a specific admin guard
-    
-        if (!$admin) {
-            session()->flash('error', 'You must be logged in to create announcements.');
-            $this->isModalOpen = false;
-            return;
-        }
-    
-        $this->validate();
+        // Validate the input
+        $validatedData = $this->validate([
+            'title' => 'required|string|max:255',
+            'details' => 'required|string',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
     
         try {
             $this->image_url = null;
+            $admin = auth('admin')->user();
     
+            if (!$admin) {
+                session()->flash('error', 'You must be logged in to create announcements.');
+                $this->isModalOpen = false;
+                return;
+            }
+    
+            // Handle image upload
             if ($this->image) {
                 // Initialize Cloudinary using the URL from .env
                 $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
@@ -90,7 +94,6 @@ class AnnouncementTable extends Component
                 'details' => $this->details,
                 'image_url' => $this->image_url,
                 'status' => 'review',  // Default status when creating an announcement
-                'user_id' => $admin->id, // Optional: associate the announcement with the user
             ]);
     
             if ($announcement) {
@@ -106,6 +109,14 @@ class AnnouncementTable extends Component
         }
     
         $this->isModalOpen = false;
+    }
+    
+    // Add this method to handle file validation
+    public function updatedImage()
+    {
+        $this->validateOnly('image', [
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
     }
 
     public function closeModal()
