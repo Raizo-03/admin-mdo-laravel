@@ -73,6 +73,10 @@ Route::post('/admin/profile/update', [AdminController::class, 'updateProfilePict
 Route::get('/dashboard/contentmanagement/trivia', [TriviaController::class, 'index'])->name('trivia.index');
 
 //Content Management / Trivia Routing
-Route::get('/dashboard/contentmanagement/feedback', [FeedbackController::class, 'index'])->name('feedback.index');
+Route::get('/dashboard/contentmanagement/feedback', action: [FeedbackController::class, 'index'])->name('feedback.index');
+
+Route::get('/feedback/chart-data', [FeedbackController::class, 'getChartData']);
+
+
 
 ?>

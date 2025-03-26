@@ -138,10 +138,30 @@
     </div>
 </div>
 
+<div class="bg-white p-4 rounded-lg shadow-md">
+    <div class="flex justify-between items-center mb-3">
+        <h2 class="text-base font-bold text-gray-800">Monthly Feedback Reports</h2>
+        <div class="relative">
+            <select id="timeFilter" class="block appearance-none bg-gray-100 border border-gray-300 text-gray-700 py-1 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-xs">
+                <option value="12" selected>Last 12 months</option>
+                <option value="6">Last 6 months</option>
+                <option value="3">Last 3 months</option>
+            </select>
+        </div>
+    </div>
+    <div class="h-64">
+        <canvas id="feedbackChart"></canvas>
+    </div>
+</div>
+
+
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         let appointmentsChart;
@@ -208,6 +228,8 @@
         // Load default chart
         fetchChartData();
     });
+
+
 
 document.addEventListener("DOMContentLoaded", function () {
     let registrationsChart;
@@ -291,6 +313,75 @@ document.addEventListener("DOMContentLoaded", function () {
     // Load default chart
     fetchRegistrationsChart();
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    function fetchFeedbackChart(months = 12) {
+        $.ajax({
+            url: "/feedback/chart-data",
+            type: "GET",
+            data: { months: months },
+            success: function (data) {
+                let labels = data.map(item => item.month);
+                let ratings = [1, 2, 3, 4, 5]; // Star ratings
+                let ratingCounts = ratings.map(rating => data.map(item => item.ratings[rating] || 0));
+
+                let ctx = document.getElementById("feedbackChart").getContext("2d");
+
+                // Destroy previous chart instance if it exists
+                if (window.feedbackChartInstance) {
+                    window.feedbackChartInstance.destroy();
+                }
+
+                window.feedbackChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: ratings.map((rating, index) => ({
+                            label: `${rating}-Star Ratings`,
+                            data: ratingCounts[index],
+                            backgroundColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 0.6)`, 
+                            borderColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 1)`,
+                            borderWidth: 1
+                        }))
+                    },
+                 options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                align: 'center', // Centers the legend
+                                labels: {
+                                    boxWidth: 15,
+                                    padding: 10
+                                }
+                            }
+                        },
+                        scales: {
+                            y: { beginAtZero: true, stacked: true },
+                            x: {
+                                stacked: true,
+                                ticks: {
+                                    callback: function(value, index) {
+                                        let date = new Date(labels[index] + "-01");
+                                        return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    fetchFeedbackChart();
+
+    document.getElementById("timeFilter").addEventListener("change", function () {
+        fetchFeedbackChart(this.value);
+    });
+});
+
 
 
 
