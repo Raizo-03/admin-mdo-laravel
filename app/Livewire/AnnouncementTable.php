@@ -56,50 +56,55 @@ class AnnouncementTable extends Component
 
     public function saveAnnouncement()
     {
+        // Check if user is authenticated
+        $admin = auth()->user(); // Or use auth('admin')->user() if you have a specific admin guard
+    
+        if (!$admin) {
+            session()->flash('error', 'You must be logged in to create announcements.');
+            $this->isModalOpen = false;
+            return;
+        }
+    
         $this->validate();
-
+    
         try {
             $this->image_url = null;
-            $admin = auth('admin')->user();
-
-            if (!$admin) {
-                return redirect()->route('login')->with('error', 'You must be logged in to update your profile picture.');
-            }
-
+    
             if ($this->image) {
                 // Initialize Cloudinary using the URL from .env
                 $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
-
+    
                 // Upload the image to Cloudinary
                 $uploadResult = $cloudinary->uploadApi()->upload($this->image->getRealPath(), [
                     'resource_type' => 'auto',
                     'folder' => 'announcements'
                 ]);
-
+    
                 // Get the secure image URL
                 $this->image_url = $uploadResult['secure_url'] ?? null;
             }
-
+    
             // Save the announcement directly to the database
             $announcement = Announcement::create([
                 'title' => $this->title,
                 'details' => $this->details,
                 'image_url' => $this->image_url,
                 'status' => 'review',  // Default status when creating an announcement
+                'user_id' => $admin->id, // Optional: associate the announcement with the user
             ]);
-
+    
             if ($announcement) {
                 session()->flash('message', 'Announcement saved successfully!');
                 $this->reset(['title', 'details', 'image', 'image_url']);
             } else {
                 session()->flash('error', 'Failed to save announcement.');
             }
-
+    
         } catch (\Exception $e) {
             Log::error('Error saving announcement: ' . $e->getMessage());
             session()->flash('error', 'Error uploading image: ' . $e->getMessage());
         }
-
+    
         $this->isModalOpen = false;
     }
 
