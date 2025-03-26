@@ -30,6 +30,8 @@ class AnnouncementController extends Controller
 
     public function store(Request $request)
     {
+        
+        
         $request->validate([
             'title' => 'required|string|max:255',
             'details' => 'required|string',

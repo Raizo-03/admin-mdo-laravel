@@ -60,6 +60,11 @@ class AnnouncementTable extends Component
 
         try {
             $this->image_url = null;
+            $admin = auth('admin')->user();
+
+            if (!$admin) {
+                return redirect()->route('login')->with('error', 'You must be logged in to update your profile picture.');
+            }
 
             if ($this->image) {
                 // Initialize Cloudinary using the URL from .env
