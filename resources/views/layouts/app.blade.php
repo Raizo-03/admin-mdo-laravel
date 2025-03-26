@@ -83,7 +83,7 @@
                     <img src="{{ asset('images/feedback.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Feedback
                 </a>
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                <a href="{{ route('announcement.index') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/announcement.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Announcements
                 </a>

@@ -28,6 +28,7 @@ Route::get('/dashboard', [AnnouncementController::class, 'countAnnouncements']);
 Route::get('/dashboard', [MessageController::class, 'getUnreadMessageCount']); // Updated function name
 Route::get('/appointments-data', [AppointmentController::class, 'getAppointmentsData']);
 Route::get('/registrations-data', [UserController::class, 'getMonthlyUserRegistrations']);
+Route::get('/feedback/chart-data', [FeedbackController::class, 'getChartData']);
 
 
 
@@ -72,10 +73,12 @@ Route::post('/admin/profile/update', [AdminController::class, 'updateProfilePict
 //Content Management / Trivia Routing
 Route::get('/dashboard/contentmanagement/trivia', [TriviaController::class, 'index'])->name('trivia.index');
 
-//Content Management / Trivia Routing
+//Content Management / Feedback Routing
 Route::get('/dashboard/contentmanagement/feedback', action: [FeedbackController::class, 'index'])->name('feedback.index');
 
-Route::get('/feedback/chart-data', [FeedbackController::class, 'getChartData']);
+//Content Management / Announcement Routing
+Route::get('/dashboard/contentmanagement/announcement', action: [AnnouncementController::class, 'index'])->name('announcement.index');
+Route::post('/announcements/store', [AnnouncementController::class, 'store'])->name('announcements.store');
 
 
 

@@ -11,5 +11,11 @@ class Announcement extends Model
 {
     use HasFactory;
     protected $table = 'Announcements'; // Explicitly define table name (optional if it matches Laravel convention)
+    public $timestamps = false; // Add this line
+
+
+    protected $fillable = ['title', 'details', 'image_url'];
+
+
 
 }
