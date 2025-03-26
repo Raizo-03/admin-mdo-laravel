@@ -60,7 +60,7 @@ class AnnouncementTable extends Component
         $validatedData = $this->validate([
             'title' => 'required|string|max:255',
             'details' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
     
         try {

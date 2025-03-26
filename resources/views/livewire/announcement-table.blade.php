@@ -5,63 +5,84 @@
 
 
 <div>
-    <!-- Add Announcement Button -->
-    <button wire:click="createAnnouncement" class="bg-blue-600 text-white px-4 py-2 rounded-md mb-4">
-        + Add Announcement
-    </button>
+<!-- Button to open modal -->
+<button type="button" class="bg-blue-600 text-white px-4 py-2 rounded-md shadow hover:bg-blue-700 transition" onclick="toggleModal()">
+    Add Announcement
+</button>
 
-    <!-- Modal -->
-@if($isModalOpen)
-<div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-    <div class="bg-white rounded-lg shadow-lg w-1/3 p-6 relative">
-        <button wire:click="$set('isModalOpen', false)" class="absolute top-2 right-3 text-gray-600 hover:text-red-600">
+<!-- Modal -->
+<div id="announcementModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
+        <!-- Close button -->
+        <button type="button" class="absolute top-2 right-3 text-gray-600 hover:text-red-600" onclick="toggleModal()">
             ✖
         </button>
 
         <h2 class="text-2xl font-bold mb-4">Add Announcement</h2>
 
-        <form wire:submit.prevent="saveAnnouncement" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('announcements.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <!-- Image Upload Preview -->
+
+            <!-- Image Upload with Preview -->
             <div class="mb-4">
-                @if ($image)
-                    <img src="{{ $image->temporaryUrl() }}" class="w-full h-40 object-cover rounded-md mb-2">
-                @else
-                    <div class="w-full h-40 bg-gray-200 flex items-center justify-center text-gray-500 rounded-md">
-                        No Image Selected
-                    </div>
-                @endif
-                <input type="file" wire:model="image" class="mt-2">
+                <label class="block text-gray-700 font-semibold">Image</label>
+                <input type="file" name="image" id="imageInput" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-300" required onchange="previewImage(event)">
+                <div class="mt-2">
+                    <img id="imagePreview" src="" class="hidden w-full h-40 object-cover rounded-md border" alt="Image Preview">
+                </div>
                 @error('image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <!-- Title Input -->
             <div class="mb-4">
                 <label class="block text-gray-700 font-semibold">Title</label>
-                <input type="text" wire:model="title" class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300">
-                {{-- @error('title') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror --}}
+                <input type="text" name="title" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-300" required>
+                @error('title') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <!-- Details Input -->
             <div class="mb-4">
                 <label class="block text-gray-700 font-semibold">Details</label>
-                <textarea wire:model="details" class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-blue-300"></textarea>
-                {{-- @error('details') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror --}}
+                <textarea name="details" class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-300" required></textarea>
+                @error('details') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
             </div>
 
             <!-- Buttons -->
             <div class="flex justify-end space-x-2">
-                <button type="button" wire:click="$set('isModalOpen', false)" class="bg-gray-500 text-white px-4 py-2 rounded-md">
+                <button type="button" class="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition" onclick="toggleModal()">
                     Cancel
                 </button>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
                     Save
                 </button>
             </div>
         </form>
     </div>
 </div>
-@endif
+
+<!-- JavaScript for modal and image preview -->
+<script>
+    function toggleModal() {
+        document.getElementById('announcementModal').classList.toggle('hidden');
+    }
+
+    function previewImage(event) {
+        const imagePreview = document.getElementById('imagePreview');
+        const file = event.target.files[0];
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                imagePreview.src = e.target.result;
+                imagePreview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        } else {
+            imagePreview.classList.add('hidden');
+            imagePreview.src = "";
+        }
+    }
+</script>
 
 </div>
 

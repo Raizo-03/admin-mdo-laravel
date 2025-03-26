@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Announcement;
-use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Support\Facades\Log;
+use Cloudinary\Cloudinary;
 
 class AnnouncementController extends Controller
 {
@@ -30,35 +30,54 @@ class AnnouncementController extends Controller
 
     public function store(Request $request)
     {
-        
-        
-        $request->validate([
+        // Validate input
+        $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'details' => 'required|string',
-            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'image' => 'required|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         try {
-            $imageUrl = null;
-            if ($request->hasFile('image')) {
-                // Upload to Cloudinary
-                $uploadResult = Cloudinary::upload($request->file('image')->getRealPath(), [
-                    'folder' => 'announcements'
-                ]);
-                $imageUrl = $uploadResult->getSecurePath();
+            $image_url = null;
+            $admin = auth('admin')->user();
+
+            if (!$admin) {
+                return back()->with('error', 'You must be logged in to create announcements.');
             }
 
-            // Create Announcement
-            $announcement = new Announcement();
-            $announcement->title = $request->title;
-            $announcement->details = $request->details;
-            $announcement->image_url = $imageUrl;
-            $announcement->save();
+            // Handle image upload
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
 
-            return response()->json(['success' => true, 'message' => 'Announcement created successfully!']);
+                // Initialize Cloudinary
+                $cloudinary = new Cloudinary(env('CLOUDINARY_URL'));
+
+                // Upload the image
+                $uploadResult = $cloudinary->uploadApi()->upload($file->getRealPath(), [
+                    'resource_type' => 'auto',
+                    'folder' => 'announcements'
+                ]);
+
+                // Get the secure image URL
+                $image_url = $uploadResult['secure_url'] ?? null;
+            }
+
+            // Save the announcement in the database
+            $announcement = Announcement::create([
+                'title' => $validatedData['title'],
+                'details' => $validatedData['details'],
+                'image_url' => $image_url,
+                'status' => 'review',
+            ]);
+
+            if ($announcement) {
+                return back()->with('success', 'Announcement saved successfully!');
+            } else {
+                return back()->with('error', 'Failed to save announcement.');
+            }
         } catch (\Exception $e) {
-            Log::error('Error storing announcement: ' . $e->getMessage());
-            return response()->json(['success' => false, 'message' => 'Failed to create announcement.'], 500);
+            Log::error('Error saving announcement: ' . $e->getMessage());
+            return back()->with('error', 'Error uploading image: ' . $e->getMessage());
         }
     }
 
