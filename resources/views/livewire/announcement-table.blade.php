@@ -21,6 +21,7 @@
         <h2 class="text-2xl font-bold mb-4">Add Announcement</h2>
 
         <form wire:submit.prevent="saveAnnouncement" method="POST" enctype="multipart/form-data">
+            @csrf
             <!-- Image Upload Preview -->
             <div class="mb-4">
                 @if ($image)
