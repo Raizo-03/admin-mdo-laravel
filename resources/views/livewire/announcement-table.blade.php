@@ -11,15 +11,16 @@
     </button>
 
     <!-- Modal -->
-    @if($isModalOpen)
-    <div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
-        <div class="bg-white rounded-lg shadow-lg w-1/3 p-6 relative">
-            <button wire:click="$set('isModalOpen', false)" class="absolute top-2 right-3 text-gray-600 hover:text-red-600">
-                ✖
-            </button>
+@if($isModalOpen)
+<div class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-50">
+    <div class="bg-white rounded-lg shadow-lg w-1/3 p-6 relative">
+        <button wire:click="$set('isModalOpen', false)" class="absolute top-2 right-3 text-gray-600 hover:text-red-600">
+            ✖
+        </button>
 
-            <h2 class="text-2xl font-bold mb-4">Add Announcement</h2>
+        <h2 class="text-2xl font-bold mb-4">Add Announcement</h2>
 
+        <form wire:submit.prevent="saveAnnouncement" enctype="multipart/form-data">
             <!-- Image Upload Preview -->
             <div class="mb-4">
                 @if ($image)
@@ -49,16 +50,18 @@
 
             <!-- Buttons -->
             <div class="flex justify-end space-x-2">
-                <button wire:click="$set('isModalOpen', false)" class="bg-gray-500 text-white px-4 py-2 rounded-md">
+                <button type="button" wire:click="$set('isModalOpen', false)" class="bg-gray-500 text-white px-4 py-2 rounded-md">
                     Cancel
                 </button>
-                <button wire:click="saveAnnouncement" class="bg-blue-600 text-white px-4 py-2 rounded-md">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">
                     Save
                 </button>
             </div>
-        </div>
+        </form>
     </div>
-    @endif
+</div>
+@endif
+
 </div>
 
 
