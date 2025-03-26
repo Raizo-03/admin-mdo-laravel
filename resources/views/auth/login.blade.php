@@ -40,9 +40,9 @@
                     </button>
                 </form>
 
-                <div class="text-center mt-4 text-gray-600">
+                {{-- <div class="text-center mt-4 text-gray-600">
                     <a href="#" class="hover:underline">Forgot Password?</a>
-                </div>
+                </div> --}}
             </div>
         </div>
 
