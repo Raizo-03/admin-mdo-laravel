@@ -71,7 +71,7 @@
                 <!-- Chat Input - Positioned at the bottom -->
                 <div class="absolute bottom-0 left-0 right-0 p-4 border-t flex">
                     <input id="chat-input" type="text" class="w-full p-2 border rounded" placeholder="Type a message..." disabled>
-                    <button id="send-btn" class="bg-blue-500 text-white px-4 py-2 rounded ml-2" disabled>Send</button>
+                    <button id="send-btn" class="bg-[#111C4E] text-white px-4 py-2 rounded ml-2" disabled>Send</button>
                 </div>
             </div>
     </div>
