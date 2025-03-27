@@ -11,7 +11,7 @@ use App\Http\Controllers\AnnouncementController;;
 use App\Http\Controllers\MessageController;
 use App\Livewire\StudentsTable;
 use App\Http\Controllers\TriviaController;
-
+use App\Models\Message;
 
 // Redirect root URL to login
 Route::get('/', function () {
@@ -81,5 +81,22 @@ Route::get('/dashboard/contentmanagement/announcement', action: [AnnouncementCon
 Route::post('/announcements/store', [AnnouncementController::class, 'store'])->name('announcements.store');
 
 
+//ContentManagaement / Chat Routing
+Route::get('/admin/chat', function () {
+    $users = Message::select('sender_email as email')
+        ->where('receiver_email', 'admin2@example.com')
+        ->orWhere('sender_email', 'admin2@example.com')
+        ->distinct()
+        ->get();
+
+    return view('dashboard.contentmanagement.chat.index', compact('users'));
+})->name('admin.chat');
+
+Route::get('/messages/{userEmail}', [MessageController::class, 'fetchMessages'])->name('messages.fetch');
+Route::post('/messages/send', [MessageController::class, 'sendMessage'])->name('messages.send');
+Route::get('/users-with-messages', [MessageController::class, 'getUsersWithMessages'])->name('users.messages');
+Route::get('/users-with-unread-messages', [MessageController::class, 'getUsersWithUnreadMessages'])
+    ->name('users.unread-messages');
+    
 
 ?>

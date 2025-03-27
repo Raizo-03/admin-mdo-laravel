@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Laravel App')</title>
     <script src="https://cdn.tailwindcss.com"></script>
      @livewireStyles
@@ -75,7 +76,7 @@
 
             <h2 class="text-[17px] font-bold mb-3">Content Manager</h2>
             <nav class="flex flex-col gap-3 mb-6">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                <a href="{{ route('admin.chat') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/chat_icon.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Chat
                 </a>
