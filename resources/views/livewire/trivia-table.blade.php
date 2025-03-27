@@ -8,9 +8,26 @@
 
 
     <!-- Add Trivia Button -->
-    <button wire:click="createTrivia" class="bg-blue-600 text-white px-4 py-2 rounded-md mb-4">
-        + Add Trivia
-    </button>
+    <div class="flex items-center gap-4 mb-4">
+        <!-- Add Trivia Button -->
+        <button wire:click="createTrivia" class="bg-blue-600 text-white px-4 py-2 rounded-md h-10 flex items-center">
+            + Add Trivia
+        </button>
+
+        <!-- Total Trivias Card -->
+        <div class="bg-white shadow-md rounded-lg px-3 py-2 h-10 flex items-center">
+            <div class="mr-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
+                </svg>
+            </div>
+            <div>
+                <h3 class="text-gray-600 text-xs mr-1">Total Trivias</h3>
+                <p class="text-sm font-bold text-blue-600">{{ $totalTrivias }}</p>
+            </div>
+        </div>
+    </div>
+
 
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
     <div class="overflow-x-auto p-4">

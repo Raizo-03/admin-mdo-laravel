@@ -14,6 +14,8 @@ class TriviaTable extends Component
     public $showModal = false; // <-- Add this line
     public $question;
     public $answer;
+    public $totalTrivias; // <-- Add this line
+
     public function updatingSearch()
     {
         $this->resetPage();
@@ -25,6 +27,8 @@ class TriviaTable extends Component
                         ->orWhere('answer', 'like', '%'.$this->search.'%')
                         ->paginate(10);
 
+        $this->totalTrivias = Trivia::count(); // <-- Count total trivias
+               
         return view('livewire.trivia-table', compact('trivias'));
     }
 
