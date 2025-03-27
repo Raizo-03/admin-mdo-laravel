@@ -42,7 +42,6 @@ class MessageController extends Controller
         return response()->json($messages);
     }
     // Send a new message
-// Send a new message
 public function sendMessage(Request $request)
 {
     $request->validate([
@@ -55,7 +54,7 @@ public function sendMessage(Request $request)
         'receiver_email' => $request->receiver_email,
         'message' => $request->message,
         'status' => 'unread',
-        'timestamp' => now()
+        'timestamp' => now('Asia/Manila') // Specify Philippine timezone
     ]);
 
     return response()->json([
