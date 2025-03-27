@@ -74,7 +74,7 @@
                 </a>
             </nav>
 
-            <h2 class="text-[17px] font-bold mb-3">Content Manager</h2>
+            <h2 class="text-[17px] font-bold mb-3">Content Management</h2>
             <nav class="flex flex-col gap-3 mb-6">
                 <a href="{{ route('admin.chat') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/chat_icon.png') }}" alt="Clinic Logo" class="w-5 h-5">
