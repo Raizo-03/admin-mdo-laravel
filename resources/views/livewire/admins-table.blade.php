@@ -1,5 +1,4 @@
-<div>
-    <div class="container mx-auto p-6">
+<div class="container mx-auto p-6">
     <h1 class="text-3xl font-bold text-white mb-4">Admins</h1>
     <p class="text-gray-400 mb-4">All list of admins</p>
 
@@ -9,66 +8,82 @@
     </div>
 
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
-    <div class="overflow-x-auto p-4">
-        <table class="w-full border-collapse text-gray-900">
-            <thead>
-                <tr class="bg-gray-200 text-gray-700 text-left">
-                    <th class="px-4 py-3">Username</th>
-                    <th class="px-4 py-3">Email</th>
-                    <th class="px-4 py-3">Action</th>
-                </tr>
-            </thead>
-            <tbody id="studentTable">
-                @foreach($admins as $admin)
-                <tr class="border-b border-gray-300 hover:bg-gray-100 transition duration-200">
-                    <td class="px-4 py-3">{{ $admin->username }}</td>
-                    <td class="px-4 py-3">{{ $admin->email }}</td>
-                    <td class="px-4 py-3 flex gap-2">
+        <div class="overflow-x-auto p-4">
+            <table class="w-full border-collapse text-gray-900">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700 text-left">
+                        <th class="px-4 py-3">Profile</th>
+                        <th class="px-4 py-3">Username</th>
+                        <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTable">
+                    @foreach($admins as $admin)
+                    <tr class="border-b border-gray-300 hover:bg-gray-100 transition duration-200">
+                        <td class="px-4 py-3">
+                        <img src="{{ $admin->profile_picture }}" 
+                            alt="{{ $admin->username }}'s profile" 
+                            class="w-12 h-12 rounded-full object-cover"
+                            id="profilePic-{{ $admin->admin_id }}">
+                        </td>
+                        <td class="px-4 py-3">{{ $admin->username }}</td>
+                        <td class="px-4 py-3">{{ $admin->email }}</td>
+                        <td class="px-4 py-3 flex gap-2">
                         <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
-                            onclick="viewAdminModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')">
+                            onclick="viewAdminModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}', '{{ $admin->profile_picture }}')">
                             👁 View
                         </button>
-                        <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md"
-                           onclick="openEditModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')">
-                            ✏ Edit
+                            <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md"
+                               onclick="openEditModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')">
+                                ✏ Edit
+                            </button>
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+
+            <!-- Pagination (existing code remains the same) -->
+            <div class="flex justify-between items-center p-4">
+                <span class="text-sm text-gray-600">
+                    Showing {{ $admins->firstItem() }} to {{ $admins->lastItem() }} of {{ $admins->total() }} rows
+                </span>
+                <div class="flex items-center space-x-2">
+                    <button wire:click="previousPage" class="px-4 py-2 border rounded-md hover:bg-gray-200" @if($admins->onFirstPage()) disabled @endif>
+                        «
+                    </button>
+                    @foreach ($admins->getUrlRange(1, $admins->lastPage()) as $page => $url)
+                        <button wire:click="gotoPage({{ $page }})" class="px-3 py-2 border rounded-md hover:bg-gray-200 @if($admins->currentPage() == $page) bg-blue-500 text-white @endif">
+                            {{ $page }}
                         </button>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-
-        <!-- Pagination inside Livewire Component -->
-<div class="flex justify-between items-center p-4">
-    <span class="text-sm text-gray-600">
-        Showing {{ $admins->firstItem() }} to {{ $admins->lastItem() }} of {{ $admins->total() }} rows
-    </span>
-    <div class="flex items-center space-x-2">
-        <button wire:click="previousPage" class="px-4 py-2 border rounded-md hover:bg-gray-200" @if($admins->onFirstPage()) disabled @endif>
-            «
-        </button>
-        @foreach ($admins->getUrlRange(1, $admins->lastPage()) as $page => $url)
-            <button wire:click="gotoPage({{ $page }})" class="px-3 py-2 border rounded-md hover:bg-gray-200 @if($admins->currentPage() == $page) bg-blue-500 text-white @endif">
-                {{ $page }}
-            </button>
-        @endforeach
-        <button wire:click="nextPage" class="px-3 py-2 border rounded-md hover:bg-gray-200" @if(!$admins->hasMorePages()) disabled @endif>
-            »
-        </button>
-    </div>
-</div>
-
-        <!-- View User Modal -->
-        <div id="viewModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
-            <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                <h2 class="text-gray-900 text-xl font-semibold mb-4">Admin Details</h2>
-                <p><strong>Username:</strong> <span id="viewAdminUsername"></span></p>
-                <p><strong>Email:</strong> <span id="viewAdminEmail"></span></p>
-                <div class="mt-4 text-right">
-                    <button class="px-4 py-2 bg-gray-600 text-white rounded-md" onclick="closeViewModal()">Close</button>
+                    @endforeach
+                    <button wire:click="nextPage" class="px-3 py-2 border rounded-md hover:bg-gray-200" @if(!$admins->hasMorePages()) disabled @endif>
+                        »
+                    </button>
                 </div>
             </div>
-        </div>
+
+            <!-- View User Modal -->
+            <div id="viewModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                    <div class="flex flex-col items-center mb-4">
+                        <img id="viewAdminProfilePic" 
+                             class="w-32 h-32 rounded-full object-cover mb-4" 
+                             alt="Admin Profile Picture">
+                        <h2 class="text-gray-900 text-xl font-semibold" id="viewAdminFullName"></h2>
+                    </div>
+                    <div class="text-center">
+                        <p><strong>Username:</strong> <span id="viewAdminUsername"></span></p>
+                        <p><strong>Email:</strong> <span id="viewAdminEmail"></span></p>
+                    </div>
+                    <div class="mt-4 text-center">
+                        <button class="px-4 py-2 bg-gray-600 text-white rounded-md" onclick="closeViewModal()">Close</button>
+                    </div>
+                </div>
+            </div>
+
+
             <!-- Edit Admin Modal -->
         <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
@@ -107,36 +122,48 @@
 </div>
 <script>
     // View User Modal
-function viewAdminModal(admin_id, username, email) {
-    console.log("Fetching user details for userId:", admin_id);
+    function viewAdminModal(admin_id, username, email, profilePicture) {
+        // Log the received profile picture URL for debugging
+        console.log("Received Profile Picture URL:", profilePicture);
 
-    fetch(`/admin-profile/${admin_id}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.debug('Fetched UserProfile:', data);
+        fetch(`/admin-profile/${admin_id}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.admin_id === "Not found") {
+                    alert("Admin profile not found.");
+                    return;
+                }
 
-            if (data.admin_id === "Not found") {
-                alert("Admin profile not found.");
-                return;
-            }
+                // Set profile picture
+                const viewAdminProfilePic = document.getElementById('viewAdminProfilePic');
+                
+                // Prioritize the passed profilePicture, then data.profile_picture
+                const picToUse = profilePicture || data.profile_picture;
+                
+                // Log the picture being used
+                console.log("Picture being used:", picToUse);
 
-            document.getElementById('viewAdminUsername').innerText = data.username;
-            document.getElementById('viewAdminEmail').innerText = data.email;
+                // Ensure the full URL is used
+                viewAdminProfilePic.src = picToUse;
+                
+                // Set other details
+                document.getElementById('viewAdminFullName').innerText = username;
+                document.getElementById('viewAdminUsername').innerText = data.username;
+                document.getElementById('viewAdminEmail').innerText = data.email;
 
-            // Show the modal
-            document.getElementById('viewModal').classList.remove('hidden');
-        })
-        .catch(error => {
-            console.error('Error fetching user profile:', error);
-            alert('Failed to fetch user profile.');
-        });
-}
-
+                // Show the modal
+                document.getElementById('viewModal').classList.remove('hidden');
+            })
+            .catch(error => {
+                console.error('Error fetching user profile:', error);
+                alert('Failed to fetch user profile.');
+            });
+    }
 
 
     function closeViewModal() {
