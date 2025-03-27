@@ -29,7 +29,7 @@
                         onclick="openChat('{{ $user->email }}')">
                         <div class="flex items-center">
                             <div class="mr-3">
-                                <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center">
+                                <div class="w-10 h-10 bg-[#111C4E] text-white rounded-full flex items-center justify-center">
                                     {{ strtoupper(substr($user->email, 0, 1)) }}
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
             <!-- Chat Panel -->
             <div class="flex-1 relative">
                 <!-- Chat Header -->
-                <div class="p-4 border-b flex items-center bg-blue-600 text-white">
+                <div class="p-4 border-b flex items-center bg-[#2139a3] text-white">
                     <svg class="w-6 h-6 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A5.99 5.99 0 016 15.333V14a6 6 0 0112 0v1.333a5.99 5.99 0 01.879 2.471M15 9a3 3 0 00-6 0"></path>
                     </svg>
@@ -164,7 +164,7 @@
         messageDiv.classList.add('text-right');
         messageDiv.innerHTML = `
             <div>
-                <div class="inline-block bg-blue-500 text-white p-2 rounded-lg mb-1">
+                <div class="inline-block bg-[#111C4E] text-white p-2 rounded-lg mb-1">
                     ${msg.message}
                 </div>
                 <div class="text-xs text-gray-400 text-right">
