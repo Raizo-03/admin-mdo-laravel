@@ -20,8 +20,8 @@ class NursesTable extends Component
     public $isDeleteModalOpen = false;  
 
     protected $rules = [
-        'username' => 'required|string|max:255|unique:admins,username',
-        'email' => 'required|email|unique:admins,email',
+        'username' => 'required|string|max:255|unique:Admins,username',
+        'email' => 'required|email|unique:Admins,email',
         'password' => 'required|string|min:3',
     ];
     
