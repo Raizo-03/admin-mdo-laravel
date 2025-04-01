@@ -1,10 +1,17 @@
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold text-white mb-4">Admins</h1>
-    <p class="text-gray-400 mb-4">All list of admins</p>
+    <h1 class="text-3xl font-bold text-white mb-4">Doctors</h1>
+    <p class="text-gray-400 mb-4">All list of Doctors</p>
 
     <!-- Search & Filter -->
     <div class="flex items-center gap-4 mb-4">
         <input type="text" id="searchInput" placeholder="Search admins..." class="w-full px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
+    </div>
+
+        <!-- Add Doctor Button -->
+    <div class="mb-4 text-left">
+        <button wire:click="openModal" class="px-4 py-2 bg-blue-600 text-white rounded-md">
+            + Add Doctor
+        </button>
     </div>
 
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -38,6 +45,11 @@
                                onclick="openEditModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')">
                                 ✏ Edit
                             </button>
+                        <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md"
+                            wire:click="openDeleteModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')">
+                            X Delete
+                        </button>
+
                         </td>
                     </tr>
                     @endforeach
@@ -118,6 +130,52 @@
 
             </div>
         </div>
+
+  <!-- Add Doctor Modal -->
+    <div class="{{ $isModalOpen ? '' : 'hidden' }} fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-gray-900 text-xl font-semibold mb-4">Add Doctor</h2>
+            <form wire:submit.prevent="addDoctor">
+                <div class="mb-3">
+                    <label for="username" class="block text-gray-700">Username:</label>
+                    <input type="text" id="username" wire:model="username" class="w-full px-3 py-2 border rounded-md">
+                    @error('username') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="email" class="block text-gray-700">Email:</label>
+                    <input type="email" id="email" wire:model="email" class="w-full px-3 py-2 border rounded-md">
+                    @error('email') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="password" class="block text-gray-700">Password:</label>
+                    <input type="password" id="password" wire:model="password" class="w-full px-3 py-2 border rounded-md">
+                    @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="mt-4 text-right">
+                    <button type="button" class="px-4 py-2 bg-gray-600 text-white rounded-md" wire:click="closeModal">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded-md">Add Doctor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+@if ($isDeleteModalOpen)
+    <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-lg font-semibold text-red-600">Confirm Delete</h2>
+            <p class="mt-2">Are you sure you want to delete <strong>{{ $deleteUsername }}</strong>'s account?</p>
+            
+            <div class="flex justify-end mt-4 space-x-2">
+                <button wire:click="closeDeleteModal" class="bg-gray-400 px-3 py-1 rounded-md">Cancel</button>
+                <button wire:click="deleteAdmin" class="bg-red-600 text-white px-3 py-1 rounded-md">Delete</button>
+            </div>
+        </div>
+    </div>
+@endif
+
 
 </div>
 <script>
@@ -230,4 +288,25 @@ document.getElementById('editAdminForm').addEventListener('submit', function(eve
             row.style.display = text.includes(filter) ? "" : "none";
         });
     });
+</script>
+
+<script>
+    // Open the Add Doctor Modal
+// Open Add Doctor Modal
+function openAddDoctorModal() {
+    // Clear the modal fields before opening it
+    document.getElementById('addDoctorUsername').value = '';
+    document.getElementById('addDoctorEmail').value = '';
+    document.getElementById('addDoctorPassword').value = ''; // Clear password field
+
+    // Show the modal
+    document.getElementById('addDoctorModal').classList.remove('hidden');
+}
+
+
+
+    // Close the Add Doctor Modal
+    function closeAddDoctorModal() {
+        document.getElementById('addDoctorModal').classList.add('hidden');
+    }
 </script>

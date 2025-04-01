@@ -50,6 +50,8 @@ Route::middleware(['web'])->group(function () {
 Route::prefix('users')->group(function () {
     Route::get('/users/students', [UserController::class, 'students'])->name('users.students.index');
     Route::get('/users/admins', [AdminController::class, 'admins'])->name('users.admins.index');
+    Route::get('/users/doctors', [AdminController::class, 'doctors'])->name('users.doctors.index');
+    Route::get('/users/nurses', [AdminController::class, 'nurses'])->name('users.nurses.index');
     // Route::get('/doctors', [DoctorController::class, 'index'])->name('users.doctors.index');
     // Route::get('/nurses', [NurseController::class, 'index'])->name('users.nurses.index');
 });
@@ -98,5 +100,10 @@ Route::get('/users-with-messages', [MessageController::class, 'getUsersWithMessa
 Route::get('/users-with-unread-messages', [MessageController::class, 'getUsersWithUnreadMessages'])
     ->name('users.unread-messages');
     
+
+//Doctor and Nurse Routing
+// Add a new admin with a doctor role
+// Route::post('/admin/create-doctor', [AdminController::class, 'createDoctor'])->name('admin.create-doctor');
+
 
 ?>

@@ -31,7 +31,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\Admin::count() }}</p>
+            <p class="text-2xl font-bold text-gray-800 mt-1.5"> {{ \App\Models\Admin::where('role', 'admin')->count() }}</p>
         </div>
 
         <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
@@ -91,7 +91,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ $waitingForConfirmation ?? '0' }}</p>
+            <p class="text-2xl font-bold text-gray-800 mt-1.5"> {{ \App\Models\Admin::where('role', 'doctor')->count() }}</p>
         </div>
 
         <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
@@ -103,7 +103,7 @@
                     </svg>
                 </div>
             </div>
-            <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ $waitingForConfirmation ?? '0' }}</p>
+            <p class="text-2xl font-bold text-gray-800 mt-1.5"> {{ \App\Models\Admin::where('role', 'nurse')->count() }}</p>
         </div>
     </div>
 <div class="bg-white p-4 rounded-lg shadow-md">

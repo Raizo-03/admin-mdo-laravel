@@ -23,6 +23,22 @@ class AdminController extends Controller
         $admins = Admin::all(); // Get all users (since they are all students)
         return view('dashboard.users.admins.index', compact('admins'));
     }
+    public function doctors()
+    {
+        // Get all doctors
+        $doctors = Admin::where('role', 'doctor')->get();  // Get only users with the 'doctor' role
+        return view('dashboard.users.doctors.index', compact('doctors'));  // Return the view with doctors data
+    }
+    
+    public function nurses()
+    {
+        // Get all doctors
+        $nurses = Admin::where('role', 'nurse')->get();  // Get only users with the 'doctor' role
+        return view('dashboard.users.nurses.index', compact('nurses'));  // Return the view with doctors data
+    }
+    
+
+
     public function show($id)
     {
         $adminProfile = Admin::where('admin_id', $id)

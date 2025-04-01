@@ -19,10 +19,17 @@ class AdminsTable extends Component
 
     public function render()
     {
-        $admins = Admin::where('username', 'like', '%'.$this->search.'%')
-                        ->orWhere('email', 'like', '%'.$this->search.'%')
-                        ->paginate(10);
-
+        $admins = Admin::where('role', 'admin') // Only fetch admins with role "admin"
+                       ->where(function ($query) {
+                           $query->where('username', 'like', '%' . $this->search . '%')
+                                 ->orWhere('email', 'like', '%' . $this->search . '%');
+                       })
+                       ->paginate(10);
+    
         return view('livewire.admins-table', compact('admins'));
     }
+
+
+    
+    
 }

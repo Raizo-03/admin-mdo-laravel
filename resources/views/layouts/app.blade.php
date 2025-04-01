@@ -52,14 +52,18 @@
                     <img src="{{ asset('images/inactive_user.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Admins
                 </a>
+                  <a href="{{ route('users.doctors.index') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                    <img src="{{ asset('images/inactive_user.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                    Doctors
+                </a>
+                 <a href="{{ route('users.nurses.index') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                    <img src="{{ asset('images/inactive_user.png') }}" alt="Clinic Logo" class="w-5 h-5">
+                    Nurses
+                </a>
             </nav>
 
             <h2 class="text-[16px] font-bold mb-3">Appointment Management</h2>
             <nav class="flex flex-col gap-3 mb-6">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
-                    <img src="{{ asset('images/appointmanager_icon.png') }}" alt="Clinic Logo" class="w-5 h-5">
-                    Requests
-                </a>
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/confirmed.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Confirmed

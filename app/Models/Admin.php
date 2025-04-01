@@ -14,7 +14,7 @@ class Admin extends Authenticatable
     protected $primaryKey = 'admin_id';
     public $timestamps = false; // <-- Add this to disable timestamps
 
-    protected $fillable = ['username', 'email', 'password', 'profile_picture'];
+    protected $fillable = ['username', 'email', 'password', 'profile_picture', 'role'];
 
     protected $hidden = [
         'password',

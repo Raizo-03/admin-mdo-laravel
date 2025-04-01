@@ -38,6 +38,7 @@
         <div class="bg-gray-100 p-4 rounded-lg shadow w-2/3">
             <p class="text-xl font-bold text-gray-800">{{ $admin->username }}</p>
             <p class="text-md text-gray-600">{{ $admin->email ?? 'No email provided' }}</p>
+            <p class="text-md text-gray-600">{{ $admin->role ?? 'admin' }}</p>
         </div>
     </div>
 </div>
