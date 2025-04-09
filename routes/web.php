@@ -105,5 +105,9 @@ Route::get('/users-with-unread-messages', [MessageController::class, 'getUsersWi
 // Add a new admin with a doctor role
 // Route::post('/admin/create-doctor', [AdminController::class, 'createDoctor'])->name('admin.create-doctor');
 
+//Appointment Management
+Route::get('/appointments/confirmed', [AppointmentController::class, 'confirmed'])->name('appointments.confirmed');
+Route::get('/appointments/completed', [AppointmentController::class, 'completed'])->name('appointments.completed');
+Route::get('/appointments/noshow', [AppointmentController::class, 'noShow'])->name('appointments.noshow');
 
 ?>

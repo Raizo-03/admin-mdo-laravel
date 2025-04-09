@@ -65,4 +65,22 @@ class AppointmentController extends Controller
             'dentalData' => $dentalData
         ]);
     }
+
+    public function confirmed()
+    {
+        $confirmed = Appointment::where('status', 'confirmed')->get();
+        return view('dashboard.appointmentmanagement.confirmed.index', compact('confirmed'));
+    }
+    
+    public function completed()
+    {
+        $completed = Appointment::where('status', 'completed')->get();
+        return view('dashboard.appointmentmanagement.completed.index', compact('completed'));
+    }
+    
+    public function noShow()
+    {
+        $noShow = Appointment::where('status', 'no show')->get();
+        return view('dashboard.appointmentmanagement.noshow.index', compact('noShow'));
+    }
 }
