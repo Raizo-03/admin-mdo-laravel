@@ -9,4 +9,6 @@ class Appointment extends Model
     use HasFactory;
 
     protected $table = 'Bookings'; // Explicitly set the table name
+    public $timestamps = false; // Disable automatic timestamp management
+
 }
