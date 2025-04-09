@@ -19,10 +19,18 @@
     </a>
 
     <!-- Right: Hi, Admin with an Icon -->
-    <a href="{{ route('admin.profile') }}" class="flex items-center gap-2 mr-3">
-    <img src="{{ asset('images/profile.png') }}" alt="Admin Icon" class="w-8 h-8">
-    Hi, {{ Auth::guard('admin')->user()->username }}
-    </a>
+        @php
+            $admin = Auth::guard('admin')->user();
+        @endphp
+
+        <a href="{{ route('admin.profile') }}" class="flex items-center gap-2 mr-3">
+            <img 
+                src="{{ $admin->profile_picture ? asset($admin->profile_picture) : asset('images/profile.png') }}" 
+                alt="Admin Icon" 
+                class="w-8 h-8 object-cover rounded-full"
+            >
+            Hi, {{ $admin->username }}
+        </a>
 </nav>
 
 <div class="flex pt-16"> <!-- Added padding top to account for fixed navbar -->
@@ -148,3 +156,4 @@
 @livewireScripts
 </body>
 </html>
+
