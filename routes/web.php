@@ -110,4 +110,8 @@ Route::get('/appointments/confirmed', [AppointmentController::class, 'confirmed'
 Route::get('/appointments/completed', [AppointmentController::class, 'completed'])->name('appointments.completed');
 Route::get('/appointments/noshow', [AppointmentController::class, 'noShow'])->name('appointments.noshow');
 
+//view approved appointments
+Route::get('appointments/confirmed/{id}', [AppointmentController::class, 'show'])->name('appointments.confirmed.show');
+
+
 ?>

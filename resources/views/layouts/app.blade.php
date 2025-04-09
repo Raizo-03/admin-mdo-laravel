@@ -8,6 +8,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
      @livewireStyles
      <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 <body class="bg-[#111C4E] min-h-screen">
 

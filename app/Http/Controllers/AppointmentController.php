@@ -83,4 +83,15 @@ class AppointmentController extends Controller
         $noShow = Appointment::where('status', 'no show')->get();
         return view('dashboard.appointmentmanagement.noshow.index', compact('noShow'));
     }
+
+    // app/Http/Controllers/AppointmentController.php
+    public function show($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        // Change this:
+        // return view('appointments.confirmed.show', compact('appointment'));
+        
+        // To this (to match the path you mentioned):
+        return view('dashboard.appointmentmanagement.confirmed.show', compact('appointment'));
+    }
 }
