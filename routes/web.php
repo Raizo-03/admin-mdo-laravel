@@ -71,6 +71,11 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
 });
 Route::post('/admin/profile/update', [AdminController::class, 'updateProfilePicture'])->name('admin.profile.update');
+Route::post('/admin/profile/update-info', [AdminController::class, 'updateInfo'])->name('admin.profile.updateInfo');
+
+
+
+
 
 //Content Management / Trivia Routing
 Route::get('/dashboard/contentmanagement/trivia', [TriviaController::class, 'index'])->name('trivia.index');
@@ -112,6 +117,7 @@ Route::get('/appointments/noshow', [AppointmentController::class, 'noShow'])->na
 
 //view approved appointments
 Route::get('appointments/confirmed/{id}', [AppointmentController::class, 'show'])->name('appointments.confirmed.show');
+
 
 
 ?>

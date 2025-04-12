@@ -20,6 +20,7 @@
                 <thead>
                     <tr class="bg-gray-200 text-gray-700 text-left">
                         <th class="px-4 py-3">Profile</th>
+                        <th class="px-4 py-3">Name</th>
                         <th class="px-4 py-3">Username</th>
                         <th class="px-4 py-3">Email</th>
                         <th class="px-4 py-3">Action</th>
@@ -34,11 +35,12 @@
                             class="w-12 h-12 rounded-full object-cover"
                             id="profilePic-{{ $admin->admin_id }}">
                         </td>
+                        <td class="px-4 py-3">{{ $admin->title. ". ". $admin->name }}</td>
                         <td class="px-4 py-3">{{ $admin->username }}</td>
                         <td class="px-4 py-3">{{ $admin->email }}</td>
                         <td class="px-4 py-3 flex gap-2">
                         <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
-                            onclick="viewAdminModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}', '{{ $admin->profile_picture }}')">
+                            onclick="viewAdminModal('{{ $admin->admin_id }}', '{{$admin->title}}', '{{$admin->name}}','{{ $admin->username }}', '{{ $admin->email }}', '{{ $admin->profile_picture }}')">
                             👁 View
                         </button>
                             <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md"
@@ -86,6 +88,7 @@
                         <h2 class="text-gray-900 text-xl font-semibold" id="viewAdminFullName"></h2>
                     </div>
                     <div class="text-center">
+                        <p><strong>Name:</strong> <span id="viewAdminName"></span></p>
                         <p><strong>Username:</strong> <span id="viewAdminUsername"></span></p>
                         <p><strong>Email:</strong> <span id="viewAdminEmail"></span></p>
                     </div>
@@ -180,7 +183,7 @@
 </div>
 <script>
     // View User Modal
-    function viewAdminModal(admin_id, username, email, profilePicture) {
+    function viewAdminModal(admin_id, title, name, username, email, profilePicture) {
         // Log the received profile picture URL for debugging
         console.log("Received Profile Picture URL:", profilePicture);
 
@@ -210,6 +213,7 @@
                 viewAdminProfilePic.src = picToUse;
                 
                 // Set other details
+                document.getElementById('viewAdminName').innerText = title + ". " + name;
                 document.getElementById('viewAdminFullName').innerText = username;
                 document.getElementById('viewAdminUsername').innerText = data.username;
                 document.getElementById('viewAdminEmail').innerText = data.email;

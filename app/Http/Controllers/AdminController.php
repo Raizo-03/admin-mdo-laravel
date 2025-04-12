@@ -130,4 +130,26 @@ public function updateProfilePicture(Request $request)
         return back()->with('error', 'Cloudinary upload failed: ' . $e->getMessage());
     }
 }
+
+public function updateInfo(Request $request)
+{
+    $request->validate([
+        'name' => 'nullable|string|max:255',
+        'title' => 'nullable|string|max:255',
+    ]);
+
+    $admin = Auth::guard('admin')->user();
+
+    $admin->name = $request->input('name');
+    $admin->title = $request->input('title');
+    $admin->save();
+
+    // Flashing a success message to session
+    return redirect()->back()->with('info_updated', [
+        'type' => 'success',
+        'title' => 'Success!',
+        'text' => 'Your name and title have been updated successfully!',
+    ]);
+}
+
 }

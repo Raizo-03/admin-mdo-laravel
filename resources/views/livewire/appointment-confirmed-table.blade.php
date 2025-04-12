@@ -4,7 +4,7 @@
     <p class="text-gray-400 mb-4">Manage Confirmed Appointments</p>
 
     <div class="flex items-center gap-4 mb-4">
-        <input type="text" id="searchInput" placeholder="Search trivias..." class="w-full px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
+        <input type="text" id="searchInput" placeholder="Search confirmed appointment..." class="w-full px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
     </div>
 
     <div class="flex items-center gap-4 mb-4">
