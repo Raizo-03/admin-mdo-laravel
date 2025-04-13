@@ -11,7 +11,7 @@ class MedicalRecordController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'booking_id' => 'required|exists:bookings,booking_id',
+            'booking_id' => 'required|exists:Bookings,booking_id',
             'diagnosis' => 'required|string',
             'prescription' => 'nullable|string',
             'notes' => 'nullable|string',

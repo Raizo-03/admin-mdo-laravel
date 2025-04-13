@@ -13,7 +13,7 @@ class VitalSignsController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'booking_id' => 'required|exists:bookings,booking_id',
+            'booking_id' => 'required|exists:Bookings,booking_id',
             'height_cm' => 'required|numeric',
             'weight_kg' => 'required|numeric',
             'blood_pressure' => 'required|string|max:20',
