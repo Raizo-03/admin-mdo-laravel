@@ -53,6 +53,9 @@
                                 <button wire:click="openStatusModal({{ $appointment->booking_id }})" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md">
                                     Complete
                                 </button>
+                                <button wire:click="openDeleteModal({{ $appointment->booking_id }})" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md">
+                                    Delete
+                                </button>
                             </td>
                         </tr>
                     @endforeach
@@ -123,6 +126,33 @@
     </div>
     @endif
 
+        <!-- Delete Confirmation Modal -->
+        @if($showDeleteModal)
+        <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div class="bg-white p-6 rounded-lg shadow-lg w-1/3 max-w-md">
+                <h2 class="text-2xl font-bold mb-4">Delete Appointment</h2>
+                
+                @if($selectedAppointment)
+                <div class="mb-4">
+                    <p class="text-gray-700 mb-4">Are you sure you want to delete this appointment?</p>
+                    <p class="text-gray-700"><strong>Email:</strong> {{ $selectedAppointment->umak_email }}</p>
+                    <p class="text-gray-700"><strong>Service:</strong> {{ $selectedAppointment->service }}</p>
+                    <p class="text-gray-700"><strong>Date/Time:</strong> {{ $selectedAppointment->booking_date }} at {{ $selectedAppointment->booking_time }}</p>
+                </div>
+                @endif
+
+                <div class="flex justify-end space-x-2">
+                    <button wire:click="closeDeleteModal" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-md">
+                        Cancel
+                    </button>
+                    <button wire:click="deleteAppointment" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md">
+                        Delete
+                    </button>
+                </div>
+            </div>
+        </div>
+        @endif
+
     <!-- SweetAlert CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     
@@ -146,6 +176,7 @@
             });
         });
     </script>
+    
 
     <script>
     // Search Functionality
@@ -159,3 +190,4 @@
     });
 
 </script>
+

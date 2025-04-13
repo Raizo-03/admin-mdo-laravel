@@ -94,4 +94,40 @@ class AppointmentController extends Controller
         // To this (to match the path you mentioned):
         return view('dashboard.appointmentmanagement.confirmed.show', compact('appointment'));
     }
+
+    public function createFollowUp(Request $request)
+{
+    $request->validate([
+        'umak_email' => 'required|email',
+        'service' => 'required|string',
+        'service_type' => 'required|string',
+        'booking_date' => 'required|date|after:today',
+        'booking_time' => 'required',
+        'remarks' => 'nullable|string',
+        'status' => 'required|in:Pending,Approved,Completed,No Show',
+    ]);
+
+    // Create a new booking
+    $booking = Appointment::create([
+        'umak_email' => $request->umak_email,
+        'service' => $request->service,
+        'service_type' => $request->service_type,
+        'booking_date' => $request->booking_date,
+        'booking_time' => $request->booking_time,
+        'remarks' => $request->remarks,
+        'status' => $request->status,
+    ]);
+
+    return redirect()->back()->with('success', 'Follow-up appointment scheduled successfully!');
+}
+public function getFollowUpAppointments($email)
+{
+    $appointments = Appointment::where('remarks', 'For Follow-up')
+                              ->where('umak_email', $email)
+                              ->orderBy('booking_date', 'asc')
+                              ->get(['umak_email', 'service', 'service_type', 'booking_date', 'booking_time', 'status']);
+
+    return response()->json($appointments);
+}
+
 }

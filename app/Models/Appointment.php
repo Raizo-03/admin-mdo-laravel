@@ -12,5 +12,27 @@ class Appointment extends Model
     protected $primaryKey = 'booking_id';
 
     public $timestamps = false; // Disable automatic timestamp management
+    
+    protected $fillable = [
+        'umak_email',
+        'service',
+        'service_type',
+        'booking_date',
+        'booking_time',
+        'remarks',
+        'status',
+    ];
+    public function user()
+{
+    return $this->belongsTo(User::class, 'umak_email', 'umak_email');
+}
 
+public function vitalSigns()
+{
+    return $this->hasOne(VitalSigns::class, 'booking_id', 'booking_id');
+}
+public function medicalRecord()
+{
+    return $this->hasOne(MedicalRecord::class, 'booking_id', 'booking_id');
+}
 }

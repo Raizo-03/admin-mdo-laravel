@@ -89,4 +89,35 @@ class AppointmentConfirmedTable extends Component
             'appointments' => $appointments
         ]);
     }
+
+    public $showDeleteModal = false;
+
+        public function openDeleteModal($id)
+        {
+            $this->selectedAppointment = Appointment::find($id);
+            $this->showDeleteModal = true;
+        }
+
+        public function closeDeleteModal()
+        {
+            $this->showDeleteModal = false;
+            $this->selectedAppointment = null;
+        }
+
+        public function deleteAppointment()
+        {
+            if ($this->selectedAppointment) {
+                // Delete the appointment
+                $this->selectedAppointment->delete();
+                
+                // Show SweetAlert with JavaScript
+                $this->dispatch('showAlert', [
+                    'type' => 'success',
+                    'title' => 'Success!',
+                    'text' => 'Deleted successfully!'
+                ]);
+                
+                $this->closeDeleteModal();
+            }
+        }
 }
