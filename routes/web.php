@@ -118,6 +118,12 @@ Route::get('/appointments/noshow', [AppointmentController::class, 'noShow'])->na
 //view approved appointments
 Route::get('appointments/confirmed/{id}', [AppointmentController::class, 'show'])->name('appointments.confirmed.show');
 
+//view completed appointments
+Route::get('appointments/completed/{id}', [AppointmentController::class, 'showCompleted'])->name('appointments.completed.show');
+
+
+
+
 //Vital Signs
 Route::post('/vital-signs', [App\Http\Controllers\VitalSignsController::class, 'store'])->name('vital-signs.store');
 Route::put('/vital-signs/{booking_id}', [App\Http\Controllers\VitalSignsController::class, 'update'])->name('vital-signs.update');
