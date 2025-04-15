@@ -121,7 +121,8 @@ Route::get('appointments/confirmed/{id}', [AppointmentController::class, 'show']
 //view completed appointments
 Route::get('appointments/completed/{id}', [AppointmentController::class, 'showCompleted'])->name('appointments.completed.show');
 
-
+//view completed appointments
+Route::get('appointments/noshow/{id}', [AppointmentController::class, 'showNoShow'])->name('appointments.noShow.show');
 
 
 //Vital Signs
@@ -135,6 +136,7 @@ Route::put('/medical-records/{booking_id}', [App\Http\Controllers\MedicalRecordC
 //Follow up
 Route::post('/appointments/followup', [App\Http\Controllers\AppointmentController::class, 'createFollowUp'])->name('appointments.followup');
 Route::get('/appointments/followups/{email}', [AppointmentController::class, 'getFollowUpAppointments'])->name('appointments.followups');
+
 
 
 ?>

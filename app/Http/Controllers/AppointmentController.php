@@ -104,6 +104,15 @@ class AppointmentController extends Controller
         // To this (to match the path you mentioned):
         return view('dashboard.appointmentmanagement.completed.show', compact('appointment'));
     }
+    public function showNoShow($id)
+    {
+        $appointment = Appointment::findOrFail($id);
+        // Change this:
+        // return view('appointments.confirmed.show', compact('appointment'));
+        
+        // To this (to match the path you mentioned):
+        return view('dashboard.appointmentmanagement.noshow.show', compact('appointment'));
+    }
 
     public function createFollowUp(Request $request)
 {

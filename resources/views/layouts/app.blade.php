@@ -82,7 +82,7 @@
                     <img src="{{ asset('images/completed.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     Completed
                 </a>
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
+                <a href="{{ route('appointments.noshow') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/no_show.png') }}" alt="Clinic Logo" class="w-5 h-5">
                     No Show
                 </a>
