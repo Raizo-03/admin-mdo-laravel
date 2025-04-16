@@ -22,6 +22,12 @@ class Appointment extends Model
         'remarks',
         'status',
     ];
+    protected $casts = [
+        'booking_date' => 'date',
+        'booking_time' => 'datetime',
+        'created_at' => 'datetime',
+    ];
+    
     public function user()
 {
     return $this->belongsTo(User::class, 'umak_email', 'umak_email');

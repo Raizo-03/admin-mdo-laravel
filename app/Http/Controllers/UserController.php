@@ -71,6 +71,17 @@ class UserController extends Controller
     }
     
     
+    public function show($id)
+    {
+        // Fetch the student from the User table
+        $student = User::findOrFail($id);
+        
+        // Fetch the user profile associated with the student
+        $profile = $student->profile; // This uses the relationship you defined in the User model
     
+        return view('dashboard.users.students.show', compact('student', 'profile'));
+    }
+    
+
     
 }

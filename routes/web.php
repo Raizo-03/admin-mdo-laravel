@@ -137,6 +137,13 @@ Route::put('/medical-records/{booking_id}', [App\Http\Controllers\MedicalRecordC
 Route::post('/appointments/followup', [App\Http\Controllers\AppointmentController::class, 'createFollowUp'])->name('appointments.followup');
 Route::get('/appointments/followups/{email}', [AppointmentController::class, 'getFollowUpAppointments'])->name('appointments.followups');
 
+//Historical patients record
+//View student details
+Route::get('users/students/{id}', action: [UserController::class, 'show'])->name('students.show');
+
+//View student medical records specific
+// Route::get('users/students/{id}', action: [UserController::class, 'show'])->name('students.showPast');
+
 
 
 ?>

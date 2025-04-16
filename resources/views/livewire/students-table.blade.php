@@ -41,10 +41,10 @@
                         @endif
                     </td>
                     <td class="px-4 py-3 flex gap-2">
-                        <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
-                            onclick="viewUserModal('{{ $student->user_id }}', '{{ $student->student_id }}', '{{ $student->first_name }}', '{{ $student->last_name }}', '{{ $student->umak_email }}', '{{ $student->status }}')">
-                            👁 View
-                        </button>
+                            <a href="{{ route('students.show', $student->user_id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md">
+                                👁 View
+                            </a>
+
                         <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-md"
                             onclick="openStatusModal('{{ $student->user_id }}', '{{ $student->first_name }}', '{{ $student->status }}', '{{ $student->student_id }}')">
                             ⚡Status
