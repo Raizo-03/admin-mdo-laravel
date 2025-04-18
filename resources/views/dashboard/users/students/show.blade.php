@@ -34,7 +34,7 @@
 
                         <!-- UMak Email -->
                         <div>
-                            <p class="text-gray-600 text-sm">UMak Email</p>
+                            <p class="text-gray-600 text-sm">UMAK Email</p>
                             <p class="text-lg font-semibold">{{ $student->umak_email }}</p>
                         </div>
 

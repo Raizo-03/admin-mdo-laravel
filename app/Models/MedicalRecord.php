@@ -19,14 +19,20 @@ class MedicalRecord extends Model
         'booking_id',
         'diagnosis',
         'prescription',
+        'doctor_id',
         'doctor',
         'notes',
     ];
-
+    
     public $timestamps = false;
 
     public function booking()
     {
         return $this->belongsTo(Appointment::class, 'booking_id', 'booking_id');
+    }
+
+    public function doctor()
+    {
+        return $this->belongsTo(Admin::class, 'doctor_id', 'admin_id');
     }
 }

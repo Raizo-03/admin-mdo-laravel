@@ -16,27 +16,27 @@ class MedicalRecordController extends Controller
             'prescription' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
-
-        // Check if a record already exists for the given booking_id
+    
         $existingRecord = MedicalRecord::where('booking_id', $request->booking_id)->first();
-
+    
         if ($existingRecord) {
-            // If a record exists, update it
             return $this->update($request, $request->booking_id);
         }
-
-        // If no existing record, create a new one
+    
+        $admin = Auth::guard('admin')->user();
+    
         MedicalRecord::create([
             'booking_id' => $request->booking_id,
             'diagnosis' => $request->diagnosis,
             'prescription' => $request->prescription,
-            'doctor' => Auth::guard('admin')->user()->name,
+            'doctor_id' => $admin->admin_id,
+            'doctor' => $admin->name,
             'notes' => $request->notes,
         ]);
-
+    
         return redirect()->back()->with('success', 'Medical record saved successfully!');
     }
-
+    
     public function update(Request $request, $booking_id)
     {
         $request->validate([
@@ -44,18 +44,19 @@ class MedicalRecordController extends Controller
             'prescription' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
-
-        // Find the existing record by booking_id
+    
         $medicalRecord = MedicalRecord::where('booking_id', $booking_id)->firstOrFail();
-
-        // Update the record with the new data
+        $admin = Auth::guard('admin')->user();
+    
         $medicalRecord->update([
             'diagnosis' => $request->diagnosis,
             'prescription' => $request->prescription,
-            'doctor' => Auth::guard('admin')->user()->name,
+            'doctor_id' => $admin->admin_id,
+            'doctor' => $admin->name,
             'notes' => $request->notes,
         ]);
-
+    
         return redirect()->back()->with('success', 'Medical record updated successfully!');
     }
+    
 }

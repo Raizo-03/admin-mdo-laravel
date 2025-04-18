@@ -22,8 +22,10 @@ class VitalSigns extends Model
         'blood_pressure',
         'temperature_c',
         'attending_nurse',
+        'nurse_id',
         'notes',
     ];
+    
 
     public $timestamps = false;
     
@@ -31,4 +33,10 @@ class VitalSigns extends Model
     {
         return $this->belongsTo(Appointment::class, 'booking_id', 'booking_id');
     }
+
+    public function nurse()
+{
+    return $this->belongsTo(Admin::class, 'nurse_id', 'admin_id');
+}
+
 }
