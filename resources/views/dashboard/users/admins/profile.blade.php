@@ -79,7 +79,29 @@
                     </button>
                 </form>
             </div>
+            
+
+
         </div>
+
+            <!-- Livewire Appointment Section -->
+    <div class="mt-8">
+        @if($admin->role == 'doctor')
+            <div class="bg-white shadow-md rounded-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4"> Attended Appointments</h2>
+                @livewire('doctor-appointments')
+            </div>
+        @elseif($admin->role == 'nurse').
+            <div class="bg-white shadow-md rounded-lg p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4"> Attended Appointments</h2>
+            @livewire('nurse-appointments')
+                        </div>
+
+        @else
+            <p>No specific table for this role.</p>
+        @endif
+    </div>
+    
     </div>
 
     <!-- Success Alert -->

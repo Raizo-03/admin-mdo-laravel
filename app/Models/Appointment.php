@@ -41,4 +41,6 @@ public function medicalRecord()
 {
     return $this->hasOne(MedicalRecord::class, 'booking_id', 'booking_id');
 }
+
+
 }
