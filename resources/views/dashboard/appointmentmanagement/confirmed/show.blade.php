@@ -113,7 +113,7 @@
                         <input type="text" name="blood_pressure" value="{{ old('blood_pressure', optional($appointment->vitalSigns)->blood_pressure) }}" class="w-full border rounded p-2" required>
                     </div>
                     <div>
-                        <label class="block text-gray-600">Temperature (°C)</label>
+                        <label class="block text-gray-600">Temperature (°C format: 37.0)</label>
                         <input type="number" step="0.01" name="temperature_c" value="{{ old('temperature_c', optional($appointment->vitalSigns)->temperature_c) }}" class="w-full border rounded p-2" required>
                     </div>
                     <div class="md:col-span-2">
