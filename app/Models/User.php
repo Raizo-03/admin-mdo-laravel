@@ -26,4 +26,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(UserProfile::class, 'user_id', 'user_id');
     }
+    public function medicalInfo()
+    {
+        return $this->hasOne(MedicalInfo::class, 'user_id', 'user_id');
+    }
+
 }

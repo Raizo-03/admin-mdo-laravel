@@ -80,6 +80,35 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="border-t border-gray-300 pt-6 mt-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Medical Information</h2>
+
+    <div class="space-y-3 text-gray-700">
+        <div class="flex justify-between">
+            <span class="font-medium">Sex:</span>
+            <span>{{ $medical->sex ?? 'Not Provided' }}</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="font-medium">Blood Type:</span>
+            <span>{{ $medical->blood_type ?? 'Not Provided' }}</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="font-medium">Allergies:</span>
+            <span>{{ $medical->allergies ?? 'None Reported' }}</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="font-medium">Medical Conditions:</span>
+            <span>{{ $medical->medical_conditions ?? 'None Reported' }}</span>
+        </div>
+        <div class="flex justify-between">
+            <span class="font-medium">Medications:</span>
+            <span>{{ $medical->medications ?? 'None Reported' }}</span>
+        </div>
+    </div>
+</div>
+
+
             </div>
 
         <!-- Bookings History Tab (Initially Hidden) -->

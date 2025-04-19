@@ -77,11 +77,23 @@ class UserController extends Controller
         $student = User::findOrFail($id);
         
         // Fetch the user profile associated with the student
-        $profile = $student->profile; // This uses the relationship you defined in the User model
+        $profile = $student->profile; 
+        
+        // Fetch the medical info associated with the student
+        $medical = $student->medicalInfo; 
     
-        return view('dashboard.users.students.show', compact('student', 'profile'));
+        // If no medical info exists, create a placeholder object
+        if (!$medical) {
+            $medical = (object)[
+                'sex' => 'Not yet set',
+                'blood_type' => 'Not yet set',
+                'allergies' => 'Not yet set',
+                'medical_conditions' => 'Not yet set',
+                'medications' => 'Not yet set'
+            ];
+        }
+    
+        return view('dashboard.users.students.show', compact('student', 'profile', 'medical'));
     }
-    
-
     
 }
