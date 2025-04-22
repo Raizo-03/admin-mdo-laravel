@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Appointment;
 use Livewire\WithPagination;
+use Carbon\Carbon;
+
 
 class AppointmentNoShowTable extends Component
 {
@@ -17,6 +19,12 @@ class AppointmentNoShowTable extends Component
 
     public $showStatusModal = false;
     public $newStatus = '';
+
+    public $dateFilter = '';
+
+
+    public $tempDateFilter = '';
+    public $debugInfo = '';
 
     public $selectedAppointment = null;
 
@@ -68,21 +76,69 @@ class AppointmentNoShowTable extends Component
     }
     public function render()
     {
-        // Fetch completed appointments with search functionality
-        $appointments = Appointment::where('status', 'No Show')
-            ->where(function ($query) {
-                $query->where('umak_email', 'like', '%' . $this->search . '%')
+        try {
+            // Fetch confirmed appointments with search functionality and date filter
+            $query = Appointment::where('status', 'No Show'); // Only approved appointments
+            
+            // Apply search filter
+            if ($this->search) {
+                $query->where(function ($q) {
+                    $q->where('umak_email', 'like', '%' . $this->search . '%')
                       ->orWhere('service', 'like', '%' . $this->search . '%')
                       ->orWhere('service_type', 'like', '%' . $this->search . '%')
                       ->orWhere('booking_date', 'like', '%' . $this->search . '%')
                       ->orWhere('remarks', 'like', '%' . $this->search . '%');
-            })
-            ->orderBy('booking_date', 'desc')
-            ->paginate(10);
+                });
+            }
+            
+            // Apply date filter using Carbon
+            if ($this->dateFilter) {
+                try {
+                    $filterDate = Carbon::parse($this->dateFilter)->format('Y-m-d');
+                    $query->whereDate('booking_date', $filterDate);
+                } catch (\Exception $e) {
+                }
+            }
+            $appointments = $query->orderBy('booking_date', 'desc')
+                                ->paginate(10);
+            
+            return view('livewire.appointment-no-show-table', [
+                'appointments' => $appointments
+            ]);
+        } catch (\Exception $e) {
+            $this->debugInfo = "Render error: " . $e->getMessage();
+            return view('livewire.appointment-no-show-table', [
+                'appointments' => collect([])
+            ]);
+        }
+    }
 
-        return view('livewire.appointment-no-show-table', [
-            'appointments' => $appointments
-        ]);
+    public function applyDateFilter()
+    {
+        try {
+            if ($this->tempDateFilter) {
+                // Store current value for debugging
+                $oldValue = $this->dateFilter;
+                
+                // Update filter
+                $this->dateFilter = $this->tempDateFilter;
+                
+                // $this->debugInfo = "Filter changed from: " . $oldValue . " to: " . $this->dateFilter;
+                $this->resetPage(); // Reset pagination to first page
+            } else {
+                $this->debugInfo = "No date selected in tempDateFilter";
+            }
+        } catch (\Exception $e) {
+            $this->debugInfo = "Apply filter error: " . $e->getMessage();
+        }
+    }
+    
+    public function resetDateFilter()
+    {
+        $this->dateFilter = '';
+        $this->tempDateFilter = '';
+        // $this->debugInfo = "Filter reset";
+        $this->resetPage(); // Reset pagination to first page
     }
 
     public function openDeleteModal($id)

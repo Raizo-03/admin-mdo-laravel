@@ -3,6 +3,28 @@
     <h1 class="text-3xl font-bold text-white mb-4">Confirmed Appointments</h1>
     <p class="text-gray-400 mb-4">Manage Confirmed Appointments</p>
 
+    {{-- Filter Dates --}}
+    <div class="flex items-center gap-4 mb-4">
+        <input type="date" wire:model="tempDateFilter" class="px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
+        
+        <button wire:click="applyDateFilter" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md">
+            Apply Filter
+        </button>
+        
+        @if($dateFilter)
+            <div class="text-gray-400">
+                Filtering by date: {{ $dateFilter }}
+            </div>
+        @endif
+        
+        @if($dateFilter)
+        <button wire:click="resetDateFilter" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md">
+            Clear Filter
+        </button>
+        @endif
+
+    </div>
+
     <div class="flex items-center gap-4 mb-4">
         <input type="text" id="searchInput" placeholder="Search confirmed appointment..." class="w-full px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
     </div>
@@ -43,8 +65,8 @@
                             <td class="border px-4 py-2">{{ $appointment->umak_email }}</td>
                             <td class="border px-4 py-2">{{ $appointment->service }}</td>
                             <td class="border px-4 py-2">{{ $appointment->service_type }}</td>
-                            <td class="border px-4 py-2">{{ $appointment->booking_date }}</td>
-                            <td class="border px-4 py-2">{{ $appointment->booking_time }}</td>
+                            <td>{{ \Carbon\Carbon::parse($appointment->booking_date)->toFormattedDateString() }}</td>
+                            <td>{{ \Carbon\Carbon::parse($appointment->booking_time)->format('g:i A') }}</td>
                             <td class="border px-4 py-2">{{ $appointment->remarks }}</td>
                             <td class="border px-4 py-2">
                                     <a href="{{ route('appointments.confirmed.show', $appointment->booking_id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md mr-1">

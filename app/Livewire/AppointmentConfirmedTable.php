@@ -5,6 +5,9 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\Appointment;
 use Livewire\WithPagination;
+use Carbon\Carbon;
+
+
 
 class AppointmentConfirmedTable extends Component
 {
@@ -17,6 +20,12 @@ class AppointmentConfirmedTable extends Component
     public $showStatusModal = false;
     public $selectedAppointment = null;
     public $newStatus = '';
+    public $dateFilter = '';
+
+
+    public $tempDateFilter = '';
+    public $debugInfo = '';
+
 
     // Reset pagination when search is updated
     public function updatingSearch()
@@ -71,23 +80,69 @@ class AppointmentConfirmedTable extends Component
 
     public function render()
     {
-        // Fetch confirmed appointments with search functionality
-        $appointments = Appointment::where('status', 'Approved') // Only approved appointments
-            ->where(function ($query) {
-                // Search by service, service_type, booking_date, or remarks
-                $query->where('umak_email', 'like', '%' . $this->search . '%')
+        try {
+            // Fetch confirmed appointments with search functionality and date filter
+            $query = Appointment::where('status', 'Approved'); // Only approved appointments
+            
+            // Apply search filter
+            if ($this->search) {
+                $query->where(function ($q) {
+                    $q->where('umak_email', 'like', '%' . $this->search . '%')
                       ->orWhere('service', 'like', '%' . $this->search . '%')
                       ->orWhere('service_type', 'like', '%' . $this->search . '%')
                       ->orWhere('booking_date', 'like', '%' . $this->search . '%')
                       ->orWhere('remarks', 'like', '%' . $this->search . '%');
-            })
-            ->orderBy('booking_date', 'desc') // Order by booking_date
-            ->paginate(10); // Pagination of 10 appointments per page
+                });
+            }
+            
+            // Apply date filter using Carbon
+            if ($this->dateFilter) {
+                try {
+                    $filterDate = Carbon::parse($this->dateFilter)->format('Y-m-d');
+                    $query->whereDate('booking_date', $filterDate);
+                } catch (\Exception $e) {
+                }
+            }
+            $appointments = $query->orderBy('booking_date', 'desc')
+                                ->paginate(10);
+            
+            return view('livewire.appointment-confirmed-table', [
+                'appointments' => $appointments
+            ]);
+        } catch (\Exception $e) {
+            $this->debugInfo = "Render error: " . $e->getMessage();
+            return view('livewire.appointment-confirmed-table', [
+                'appointments' => collect([])
+            ]);
+        }
+    }
+
+    public function applyDateFilter()
+    {
+        try {
+            if ($this->tempDateFilter) {
+                // Store current value for debugging
+                $oldValue = $this->dateFilter;
+                
+                // Update filter
+                $this->dateFilter = $this->tempDateFilter;
+                
+                // $this->debugInfo = "Filter changed from: " . $oldValue . " to: " . $this->dateFilter;
+                $this->resetPage(); // Reset pagination to first page
+            } else {
+                $this->debugInfo = "No date selected in tempDateFilter";
+            }
+        } catch (\Exception $e) {
+            $this->debugInfo = "Apply filter error: " . $e->getMessage();
+        }
+    }
     
-        // Pass the $appointments variable to the view
-        return view('livewire.appointment-confirmed-table', [
-            'appointments' => $appointments
-        ]);
+    public function resetDateFilter()
+    {
+        $this->dateFilter = '';
+        $this->tempDateFilter = '';
+        // $this->debugInfo = "Filter reset";
+        $this->resetPage(); // Reset pagination to first page
     }
 
     public $showDeleteModal = false;

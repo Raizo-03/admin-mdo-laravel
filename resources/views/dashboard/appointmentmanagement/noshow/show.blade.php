@@ -58,7 +58,7 @@
 
                 <div class="flex border-b border-gray-200 pb-3">
                     <span class="font-medium text-gray-600 w-1/3">Time:</span>
-                    <span class="text-gray-800">{{ $appointment->booking_time }}</span>
+                    <span class="text-gray-800">{{ \Carbon\Carbon::parse($appointment->booking_time)->format('g:i A') }}</span>
                 </div>
 
                 <div class="mt-6">
