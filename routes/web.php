@@ -143,7 +143,8 @@ Route::get('users/students/{id}', action: [UserController::class, 'show'])->name
 
 //View student medical records specific
 // Route::get('users/students/{id}', action: [UserController::class, 'show'])->name('students.showPast');
-
+//Edit Student Details
+Route::put('users/students', [UserController::class, 'update'])->name('dashboard.users.students.update');
 
 
 ?>

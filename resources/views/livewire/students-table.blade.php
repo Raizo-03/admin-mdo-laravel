@@ -18,6 +18,7 @@
         <table class="w-full border-collapse text-gray-900">
             <thead>
                 <tr class="bg-gray-200 text-gray-700 text-left">
+                    <th class="px-4 py-3">Profile</th>
                     <th class="px-4 py-3">Student ID</th>
                     <th class="px-4 py-3">First Name</th>
                     <th class="px-4 py-3">Last Name</th>
@@ -29,6 +30,14 @@
             <tbody id="studentTable">
                 @foreach($students as $student)
                 <tr class="border-b border-gray-300 hover:bg-gray-100 transition duration-200">
+                <td class="px-4 py-3">
+                    <img 
+                        src="{{ $student->profile && $student->profile->profile_image ? 'data:image/png;base64,' . base64_encode($student->profile->profile_image) : asset('images/profile_yellow.png') }}"
+                        alt="Profile Image"
+                        onerror="this.onerror=null;this.src='{{ asset('images/profile_yellow.png') }}';"
+                        class="w-10 h-10 rounded-full object-cover"
+                    >
+                </td>
                     <td class="px-4 py-3">{{ $student->student_id }}</td>
                     <td class="px-4 py-3">{{ $student->first_name }}</td>
                     <td class="px-4 py-3">{{ $student->last_name }}</td>

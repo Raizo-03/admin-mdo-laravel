@@ -95,5 +95,25 @@ class UserController extends Controller
     
         return view('dashboard.users.students.show', compact('student', 'profile', 'medical'));
     }
+    public function update(Request $request)
+{
+    $validated = $request->validate([
+        'user_id' => 'required|exists:Users,user_id', // Changed from id to user_id
+        'student_id' => 'required|string|max:255',
+        'first_name' => 'required|string|max:255',
+        'last_name' => 'required|string|max:255',
+    ]);
+    
+    $student = User::where('user_id', $validated['user_id'])->firstOrFail(); // Changed from id to user_id
+    
+    $student->student_id = $validated['student_id'];
+    $student->first_name = $validated['first_name'];
+    $student->last_name = $validated['last_name'];
+    $student->save();
+    
+    return redirect()->route('students.show', $student->user_id)
+    ->with('success', 'Student information updated successfully');
+
+}
     
 }
