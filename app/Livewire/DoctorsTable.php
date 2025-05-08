@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class DoctorsTable extends Component
 {
@@ -69,14 +70,17 @@ class DoctorsTable extends Component
     public function render()
     {
         $admins = Admin::where('role', 'doctor')
-                       ->where(function ($query) {
-                           $query->where('username', 'like', '%' . $this->search . '%')
-                                 ->orWhere('email', 'like', '%' . $this->search . '%');
-                       })
-                       ->paginate(10);
+            ->where(function ($query) {
+                $query->where('username', 'like', '%' . $this->search . '%')
+                    ->orWhere('email', 'like', '%' . $this->search . '%');
+            })
+            ->paginate(10);
     
-        return view('livewire.doctors-table', compact('admins'));
+            $user = Auth::guard('admin')->user();
+    
+        return view('livewire.doctors-table', compact('admins', 'user'));
     }
+    
 
 
 
@@ -103,4 +107,7 @@ public function deleteAdmin()
 
     $this->closeDeleteModal();
 }
+
+
+
 }

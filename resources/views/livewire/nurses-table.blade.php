@@ -8,11 +8,21 @@
     </div>
 
             <!-- Add Nurse Button -->
-    <div class="mb-4 text-left">
-        <button wire:click="openModal" class="px-4 py-2 bg-blue-600 text-white rounded-md">
-            + Add Nurse
-        </button>
-    </div>
+@php
+    $cantAddNurse = $user->role === 'doctor' || $user->role === 'nurse';
+    $cantManageDoctor = $user->role === 'doctor' || $user->role === 'nurse';
+@endphp
+
+<div class="mb-4 text-left">
+    <button 
+        wire:click="openModal"
+        class="px-4 py-2 bg-blue-600 text-white rounded-md 
+        @if($cantAddNurse) opacity-50 cursor-not-allowed @endif"
+        @if($cantAddNurse) disabled @endif
+    >
+        + Add Nurse
+    </button>
+</div>
 
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
         <div class="overflow-x-auto p-4">
@@ -43,12 +53,21 @@
                             onclick="viewAdminModal('{{ $admin->admin_id }}', '{{$admin->title}}', '{{$admin->name}}','{{ $admin->username }}', '{{ $admin->email }}', '{{ $admin->profile_picture }}')">
                             👁 View
                         </button>
-                            <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md"
-                               onclick="openEditModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')">
-                                ✏ Edit
-                            </button>
-                             <button class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md"
-                            wire:click="openDeleteModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')">
+                           <button 
+                            class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md 
+                            @if($cantManageDoctor) opacity-50 cursor-not-allowed @endif"
+                            @if($cantManageDoctor) disabled @endif
+                            onclick="openEditModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')"
+                        >
+                            ✏ Edit
+                        </button>
+
+                        <button 
+                            class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md 
+                            @if($cantManageDoctor) opacity-50 cursor-not-allowed @endif"
+                            @if($cantManageDoctor) disabled @endif
+                            wire:click="openDeleteModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')"
+                        >
                             X Delete
                         </button>
                         </td>
@@ -101,7 +120,7 @@
             <!-- Edit Admin Modal -->
         <div id="editModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
             <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                <h2 class="text-gray-900 text-xl font-semibold mb-4">Edit Admin</h2>
+                <h2 class="text-gray-900 text-xl font-semibold mb-4">Edit Nurse</h2>
                 <form id="editAdminForm" action="{{ url('/admin-profile/update') }}" method="POST">
                     @csrf
                     @method('PUT') <!-- This tells Laravel to treat it as a PUT request -->

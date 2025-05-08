@@ -6,6 +6,8 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Admin;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
+
 
 class NursesTable extends Component
 {
@@ -74,7 +76,8 @@ class NursesTable extends Component
                        })
                        ->paginate(10);
     
-        return view('livewire.nurses-table', compact('admins'));
+        $user = Auth::guard('admin')->user();
+        return view('livewire.nurses-table', compact('admins', 'user'));
     }
 
     public function openDeleteModal($id, $username, $email)
