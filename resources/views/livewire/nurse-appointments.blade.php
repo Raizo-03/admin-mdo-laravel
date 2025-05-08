@@ -31,8 +31,8 @@
                             <td class="border px-4 py-2">{{ $appointment->umak_email }}</td>
                             <td class="border px-4 py-2">{{ $appointment->service }}</td>
                             <td class="border px-4 py-2">{{ $appointment->service_type }}</td>
-                            <td class="border px-4 py-2">{{ $appointment->booking_date }}</td>
-                            <td class="border px-4 py-2">{{ $appointment->booking_time }}</td>
+                            <td>{{ \Carbon\Carbon::parse($appointment->booking_date)->toFormattedDateString() }}</td>
+                            <td>{{ \Carbon\Carbon::parse($appointment->booking_time)->format('g:i A') }}</td>
                             <td class="border px-4 py-2">{{ $appointment->remarks }}</td>
                             <td class="border px-4 py-2">
                                 <!-- Green status for 'Completed' -->
