@@ -13,6 +13,7 @@ class MedicalRecordController extends Controller
         $request->validate([
             'booking_id' => 'required|exists:Bookings,booking_id',
             'diagnosis' => 'required|string',
+            'complaint' => 'nullable|string',
             'prescription' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
@@ -28,6 +29,7 @@ class MedicalRecordController extends Controller
         MedicalRecord::create([
             'booking_id' => $request->booking_id,
             'diagnosis' => $request->diagnosis,
+            'complaint' => $request->complaint,
             'prescription' => $request->prescription,
             'doctor_id' => $admin->admin_id,
             'doctor' => $admin->name,
@@ -41,6 +43,7 @@ class MedicalRecordController extends Controller
     {
         $request->validate([
             'diagnosis' => 'required|string',
+            'complaint' => 'nullable|string',
             'prescription' => 'nullable|string',
             'notes' => 'nullable|string',
         ]);
@@ -50,6 +53,7 @@ class MedicalRecordController extends Controller
     
         $medicalRecord->update([
             'diagnosis' => $request->diagnosis,
+            'complaint' => $request->complaint,
             'prescription' => $request->prescription,
             'doctor_id' => $admin->admin_id,
             'doctor' => $admin->name,

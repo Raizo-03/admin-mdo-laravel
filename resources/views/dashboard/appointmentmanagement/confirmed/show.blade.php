@@ -142,7 +142,14 @@
                 <button onclick="document.getElementById('medicalRecordForm').classList.remove('hidden'); document.getElementById('medicalRecordDisplay').classList.add('hidden');" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-2 rounded">Edit</button>
             </div>
             <div>
-                <p class="font-medium text-gray-600 mb-2">Diagnosis:</p>
+                <p class="font-medium text-gray-600 mb-1">Complaint:</p>
+                <div class="bg-gray-50 p-4 rounded border border-gray-200">
+                    {!! nl2br(e($appointment->medicalRecord->complaint)) !!}
+                </div>
+            </div>
+
+            <div>
+                <p class="font-medium text-gray-600 mb-1">Diagnosis:</p>
                 <div class="bg-gray-50 p-4 rounded border border-gray-200">
                     {!! nl2br(e($appointment->medicalRecord->diagnosis)) !!}
                 </div>
@@ -174,6 +181,10 @@
         <input type="hidden" name="doctor" value="{{ Auth::guard('admin')->user()->name }}">
 
         <div class="space-y-4">
+            <div>
+                <label class="block text-gray-600 mb-2">Complaint</label>
+                <textarea name="complaint" rows="4" class="w-full border rounded p-2" required>{{ old('complaint', optional($appointment->medicalRecord)->complaint) }}</textarea>
+            </div>
             <div>
                 <label class="block text-gray-600 mb-2">Diagnosis</label>
                 <textarea name="diagnosis" rows="4" class="w-full border rounded p-2" required>{{ old('diagnosis', optional($appointment->medicalRecord)->diagnosis) }}</textarea>
