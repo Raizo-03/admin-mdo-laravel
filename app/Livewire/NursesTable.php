@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 class NursesTable extends Component
 {
     use WithPagination;
+    public $statusFilter = 'all'; // New property for status filter
 
     public $search = '';
     public $username = '';
@@ -20,6 +21,11 @@ class NursesTable extends Component
     public $isModalOpen = false;
     public $deleteId, $deleteUsername, $deleteEmail;
     public $isDeleteModalOpen = false;  
+
+       // Status change properties
+    public $statusId, $statusUsername, $statusCurrentStatus;
+    public $isStatusModalOpen = false;
+    public $newStatus = '';
 
     protected $rules = [
         'username' => 'required|string|max:255|unique:Admins,username',
@@ -67,17 +73,31 @@ class NursesTable extends Component
         $this->closeModal();
     }
 
-    public function render()
+   public function render()
     {
-        $admins = Admin::where('role', 'nurse') // Only fetch admins with role "admin"
-                       ->where(function ($query) {
-                           $query->where('username', 'like', '%' . $this->search . '%')
-                                 ->orWhere('email', 'like', '%' . $this->search . '%');
-                       })
-                       ->paginate(10);
-    
+        $query = Admin::where('role', 'nurse')
+            ->where(function ($q) {
+                $q->where('username', 'like', '%' . $this->search . '%')
+                  ->orWhere('email', 'like', '%' . $this->search . '%')
+                  ->orWhere('name', 'like', '%' . $this->search . '%');
+            });
+
+        // Apply status filter
+        if ($this->statusFilter !== 'all') {
+            $query->where('status', $this->statusFilter);
+        }
+
+        $admins = $query->paginate(10);
         $user = Auth::guard('admin')->user();
-        return view('livewire.nurses-table', compact('admins', 'user'));
+
+        // Get counts for filter buttons
+        $statusCounts = [
+            'all' => Admin::where('role', 'nurse')->count(),
+            'active' => Admin::where('role', 'nurse')->where('status', 'active')->count(),
+            'archived' => Admin::where('role', 'nurse')->where('status', 'archived')->count(),
+        ];
+    
+        return view('livewire.nurses-table', compact('admins', 'user', 'statusCounts'));
     }
 
     public function openDeleteModal($id, $username, $email)
@@ -102,6 +122,49 @@ class NursesTable extends Component
         }
     
         $this->closeDeleteModal();
+    }
+
+     // Status change methods
+    public function openStatusModal($id, $username, $currentStatus)
+    {
+        $this->statusId = $id;
+        $this->statusUsername = $username;
+        $this->statusCurrentStatus = $currentStatus;
+        $this->newStatus = $currentStatus; // Set current status as default
+        $this->isStatusModalOpen = true;
+    }
+
+    public function closeStatusModal()
+    {
+        $this->reset(['statusId', 'statusUsername', 'statusCurrentStatus', 'newStatus']);
+        $this->isStatusModalOpen = false;
+    }
+public function updateStatus()
+{
+    try {
+        if ($this->statusId && $this->newStatus) {
+            $updated = Admin::where('admin_id', $this->statusId)->update([
+                'status' => $this->newStatus
+            ]);
+
+            if ($updated) {
+                $this->dispatch('status-updated');
+            } else {
+                $this->dispatch('status-error');
+            }
+        }
+    } catch (\Exception $e) {
+        $this->dispatch('status-error');
+    }
+
+    $this->closeStatusModal();
+}
+   // Method to clear all filters
+    public function clearFilters()
+    {
+        $this->search = '';
+        $this->statusFilter = 'all';
+        $this->resetPage();
     }
     
 }

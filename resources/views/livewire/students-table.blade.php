@@ -1,20 +1,71 @@
 <div class="container mx-auto p-6">
-    <h1 class="text-3xl font-bold text-white mb-4">Students</h1>
-    <p class="text-gray-400 mb-4">All list of students</p>
+    <h1 class="text-3xl font-bold text-white mb-4">User</h1>
+    <p class="text-gray-400 mb-4">All list of users</p>
 
-    <!-- Search & Filter -->
-    <div class="flex items-center gap-4 mb-4">
-        <input type="text" id="searchInput" placeholder="Search students..." class="w-full px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
-        <select id="statusFilter" class="px-4 py-2 border border-gray-600 rounded-md bg-gray-900 text-white">
-            <option value="all">All</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-        </select>
+
+    <!-- Search & Filter Section -->
+    <div class="mb-6 space-y-4">
+        <!-- Search Input -->
+        <div class="flex items-center gap-4">
+            <input type="text" 
+                   wire:model.live.debounce.300ms="search" 
+                   placeholder="Search users..." 
+                   class="flex-1 px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
+            
+            <!-- Clear Filters Button -->
+            <button wire:click="clearFilters" 
+                    class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition duration-200">
+                🗑️ Clear
+            </button>
+        </div>
+
+        <!-- Status Filter Buttons -->
+        <div class="flex flex-wrap gap-2">
+            <button wire:click="$set('statusFilter', 'all')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $statusFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                All ({{ $statusCounts['all'] }})
+            </button>
+            
+            <button wire:click="$set('statusFilter', 'active')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $statusFilter === 'active' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                Active ({{ $statusCounts['active'] }})
+            </button>
+            
+            <button wire:click="$set('statusFilter', 'inactive')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $statusFilter === 'inactive' ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                Inactive ({{ $statusCounts['inactive'] }})
+            </button>
+        </div>
+
+        <!-- Current Filter Display -->
+        @if($statusFilter !== 'all' || $search)
+        <div class="text-sm text-gray-300">
+            <span class="font-medium">Filters applied:</span>
+            @if($search)
+                <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-2">
+                    Search: "{{ $search }}"
+                </span>
+            @endif
+            @if($statusFilter !== 'all')
+                <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                    Status: {{ ucfirst($statusFilter) }}
+                </span>
+            @endif
+        </div>
+        @endif
     </div>
 
     <!-- Table Box -->
 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
     <div class="overflow-x-auto p-4">
+               <!-- Results Count -->
+            <div class="mb-4 text-sm text-gray-600">
+                Showing {{ $students->count() }} of {{ $students->total() }} users
+                @if($statusFilter !== 'all')
+                    (filtered by: {{ ucfirst($statusFilter) }} status)
+                @endif
+            </div>
+            @if($students->count() > 0)
         <table class="w-full border-collapse text-gray-900">
             <thead>
                 <tr class="bg-gray-200 text-gray-700 text-left">
@@ -67,6 +118,25 @@
                 @endforeach
             </tbody>
         </table>
+                    @else
+            <!-- No Results Found -->
+            <div class="text-center py-8">
+                <div class="text-gray-500 text-lg mb-2">📋 No users found</div>
+                <p class="text-gray-400">
+                    @if($search || $statusFilter !== 'all')
+                        Try adjusting your search or filter criteria.
+                    @else
+                        No users have been added yet.
+                    @endif
+                </p>
+                @if($search || $statusFilter !== 'all')
+                <button wire:click="clearFilters" 
+                        class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
+                    Clear Filters
+                </button>
+                @endif
+            </div>
+            @endif
 
         <!-- Pagination inside Livewire Component -->
 <div class="flex justify-between items-center p-4">

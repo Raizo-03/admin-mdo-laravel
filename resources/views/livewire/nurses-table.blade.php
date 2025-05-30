@@ -2,17 +2,65 @@
     <h1 class="text-3xl font-bold text-white mb-4">Nurses</h1>
     <p class="text-gray-400 mb-4">All list of Nurses</p>
 
-    <!-- Search & Filter -->
-    <div class="flex items-center gap-4 mb-4">
-        <input type="text" id="searchInput" placeholder="Search admins..." class="w-full px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
+    <!-- Search & Filter Section -->
+    <div class="mb-6 space-y-4">
+        <!-- Search Input -->
+        <div class="flex items-center gap-4">
+            <input type="text" 
+                   wire:model.live.debounce.300ms="search" 
+                   placeholder="Search nurses..." 
+                   class="flex-1 px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-gray-900 text-white">
+            
+            <!-- Clear Filters Button -->
+            <button wire:click="clearFilters" 
+                    class="px-4 py-2 bg-gray-600 hover:bg-gray-700 text-white rounded-md transition duration-200">
+                🗑️ Clear
+            </button>
+        </div>
+
+        <!-- Status Filter Buttons -->
+        <div class="flex flex-wrap gap-2">
+            <button wire:click="$set('statusFilter', 'all')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $statusFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                All ({{ $statusCounts['all'] }})
+            </button>
+            
+            <button wire:click="$set('statusFilter', 'active')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $statusFilter === 'active' ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                Active ({{ $statusCounts['active'] }})
+            </button>
+            
+            <button wire:click="$set('statusFilter', 'archived')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $statusFilter === 'archived' ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                Archived ({{ $statusCounts['archived'] }})
+            </button>
+        </div>
+
+        <!-- Current Filter Display -->
+        @if($statusFilter !== 'all' || $search)
+        <div class="text-sm text-gray-300">
+            <span class="font-medium">Filters applied:</span>
+            @if($search)
+                <span class="inline-block bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs mr-2">
+                    Search: "{{ $search }}"
+                </span>
+            @endif
+            @if($statusFilter !== 'all')
+                <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                    Status: {{ ucfirst($statusFilter) }}
+                </span>
+            @endif
+        </div>
+        @endif
     </div>
 
-            <!-- Add Nurse Button -->
 @php
     $cantAddNurse = $user->role === 'doctor' || $user->role === 'nurse';
     $cantManageDoctor = $user->role === 'doctor' || $user->role === 'nurse';
 @endphp
 
+
+<!-- Add Nurse Button -->
 <div class="mb-4 text-left">
     <button 
         wire:click="openModal"
@@ -26,6 +74,14 @@
 
     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
         <div class="overflow-x-auto p-4">
+                    <!-- Results Count -->
+            <div class="mb-4 text-sm text-gray-600">
+                Showing {{ $admins->count() }} of {{ $admins->total() }} nurses
+                @if($statusFilter !== 'all')
+                    (filtered by: {{ ucfirst($statusFilter) }} status)
+                @endif
+            </div>
+            @if($admins->count() > 0)
             <table class="w-full border-collapse text-gray-900">
                 <thead>
                     <tr class="bg-gray-200 text-gray-700 text-left">
@@ -33,6 +89,7 @@
                         <th class="px-4 py-3">Name</th>
                         <th class="px-4 py-3">Username</th>
                         <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">Status</th>
                         <th class="px-4 py-3">Action</th>
                     </tr>
                 </thead>
@@ -48,6 +105,15 @@
                         <td class="px-4 py-3">{{ $admin->title. ". ". $admin->name }}</td>
                         <td class="px-4 py-3">{{ $admin->username }}</td>
                         <td class="px-4 py-3">{{ $admin->email }}</td>
+                       <td class="px-4 py-3"> 
+                        @if($admin->status == 'active')
+                            <span class="px-3 py-1 text-green-700 bg-green-200 rounded-full">Active</span>
+                        @else
+                            <span class="px-3 py-1 text-red-700 bg-red-200 rounded-full">Inactive</span>
+                         {{ ucfirst($admin->status) }}
+
+                        @endif                         
+                         </td>
                         <td class="px-4 py-3 flex gap-2">
                         <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
                             onclick="viewAdminModal('{{ $admin->admin_id }}', '{{$admin->title}}', '{{$admin->name}}','{{ $admin->username }}', '{{ $admin->email }}', '{{ $admin->profile_picture }}')">
@@ -61,7 +127,7 @@
                         >
                             ✏ Edit
                         </button>
-
+{{-- 
                         <button 
                             class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded-md 
                             @if($cantManageDoctor) opacity-50 cursor-not-allowed @endif"
@@ -69,12 +135,39 @@
                             wire:click="openDeleteModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->email }}')"
                         >
                             X Delete
+                        </button> --}}
+                                          <button 
+                            class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-md 
+                            @if($cantManageDoctor) opacity-50 cursor-not-allowed @endif"
+                            @if($cantManageDoctor) disabled @endif
+                            wire:click="openStatusModal('{{ $admin->admin_id }}', '{{ $admin->username }}', '{{ $admin->status }}')"
+                        >
+                            🔄 Status
                         </button>
                         </td>
                     </tr>
                     @endforeach
                 </tbody>
             </table>
+                       @else
+            <!-- No Results Found -->
+            <div class="text-center py-8">
+                <div class="text-gray-500 text-lg mb-2">📋 No nurses found</div>
+                <p class="text-gray-400">
+                    @if($search || $statusFilter !== 'all')
+                        Try adjusting your search or filter criteria.
+                    @else
+                        No nurses have been added yet.
+                    @endif
+                </p>
+                @if($search || $statusFilter !== 'all')
+                <button wire:click="clearFilters" 
+                        class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
+                    Clear Filters
+                </button>
+                @endif
+            </div>
+            @endif
 
             <!-- Pagination (existing code remains the same) -->
             <div class="flex justify-between items-center p-4">
@@ -151,6 +244,41 @@
 
             </div>
         </div>
+
+            @if ($isStatusModalOpen)
+            <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+                    <h2 class="text-gray-900 text-xl font-semibold mb-4">Change Doctor Status</h2>
+                    <p class="text-gray-700 mb-4">Are you sure you want to change the status of <span class="font-bold">{{ $statusUsername }}</span>?</p>
+                    
+                    <div class="mb-4">
+                        <label for="statusSelect" class="block text-gray-700 mb-2">Select Status:</label>
+                        <select wire:model="newStatus" class="w-full px-3 py-2 bg-gray-200 text-gray-900 rounded-md border border-gray-400">
+                            <option value="active">Active</option>
+                            <option value="archived">Archived</option>
+                        </select>
+                    </div>
+
+                    <div class="mt-4 flex justify-end space-x-2">
+                        <button wire:click="closeStatusModal" class="px-4 py-2 bg-gray-600 text-white rounded-md">Cancel</button>
+                        <button wire:click="updateStatus" class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md">Save</button>
+                    </div>
+                </div>
+            </div>
+            @endif
+
+<script>
+    // For Livewire v3
+    document.addEventListener('status-updated', event => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Status Updated',
+            text: 'The doctor status was updated successfully.',
+            confirmButtonColor: '#3085d6',
+        });
+    });
+
+</script>
 
           <!-- Add Nurse Modal -->
     <div class="{{ $isModalOpen ? '' : 'hidden' }} fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
