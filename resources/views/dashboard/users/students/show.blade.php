@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Student Details')
+@section('title', 'User Details')
 
 @section('content')
 <div class="space-y-6">
@@ -24,13 +24,13 @@
                     <div class="flex-1 space-y-4">
                         <!-- Student Name -->
                         <div>
-                            <p class="text-gray-600 text-sm">Student Name</p>
+                            <p class="text-gray-600 text-sm">Name</p>
                             <p class="text-2xl font-bold">{{ $student->first_name }} {{ $student->last_name }}</p>
                         </div>
 
-                        <!-- Student ID -->
+                        <!-- UMAK ID -->
                         <div>
-                            <p class="text-gray-600 text-sm">Student ID</p>
+                            <p class="text-gray-600 text-sm">UMAK ID</p>
                             <p class="text-lg font-semibold">{{ $student->student_id }}</p>
                         </div>
 
@@ -45,8 +45,12 @@
                             <p class="text-gray-600 text-sm">Status</p>
                             <p class="text-lg font-semibold capitalize">{{ $student->status }}</p>
                         </div>
+                        <div>
+                            <p class="text-gray-600 text-sm">Role</p>
+                            <p class="text-lg font-semibold capitalize">{{ $student->role }}</p>
+                        </div>
                             <button onclick="document.getElementById('editModal').classList.remove('hidden'); document.getElementById('editModal').classList.add('flex');" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors justify-content:flex-end">
-                            Edit Student Basic Information
+                            Edit User Basic Information
                         </button>
 
 
@@ -71,21 +75,22 @@
                     <div class="space-y-3 text-gray-700">
                         <div class="flex justify-between">
                             <span class="font-medium">Contact Number:</span>
-                            <span>{{ trim($profile->contact_number) !== '' ? $profile->contact_number : 'Not Provided' }}</span>
+                            <span>{{ isset($profile) && trim($profile->contact_number ?? '') !== '' ? $profile->contact_number : 'Not Provided' }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="font-medium">Address:</span>
-                            <span>{{ trim($profile->address) !== '' ? $profile->address : 'Not Provided' }}</span>
+                            <span>{{ isset($profile) && trim($profile->address ?? '') !== '' ? $profile->address : 'Not Provided' }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="font-medium">Guardian Contact Number:</span>
-                            <span>{{ trim($profile->guardian_contact_number) !== '' ? $profile->guardian_contact_number : 'Not Provided' }}</span>
+                            <span>{{ isset($profile) && trim($profile->guardian_contact_number ?? '') !== '' ? $profile->guardian_contact_number : 'Not Provided' }}</span>
                         </div>
                         <div class="flex justify-between">
                             <span class="font-medium">Guardian Address:</span>
-                            <span>{{ trim($profile->guardian_address) !== '' ? $profile->guardian_address : 'Not Provided' }}</span>
+                            <span>{{ isset($profile) && trim($profile->guardian_address ?? '') !== '' ? $profile->guardian_address : 'Not Provided' }}</span>
                         </div>
                     </div>
+
                 </div>
 
                 <div class="border-t border-gray-300 pt-6 mt-6">
@@ -113,6 +118,7 @@
             <span>{{ $medical->medications ?? 'None Reported' }}</span>
         </div>
     </div>
+
 </div>
 
 
@@ -133,7 +139,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                 </svg>
-                Back to Students
+                Back to Users
             </a>
         </div>
     </div>

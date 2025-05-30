@@ -21,6 +21,7 @@
 
         <!-- Status Filter Buttons -->
         <div class="flex flex-wrap gap-2">
+            <span class="text-gray-300 font-medium mr-2">Status:</span>
             <button wire:click="$set('statusFilter', 'all')" 
                     class="px-4 py-2 rounded-md transition duration-200 {{ $statusFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
                 All ({{ $statusCounts['all'] }})
@@ -37,8 +38,27 @@
             </button>
         </div>
 
+        <!-- Role Filter Buttons -->
+        <div class="flex flex-wrap gap-2">
+            <span class="text-gray-300 font-medium mr-2">Role:</span>
+            <button wire:click="$set('roleFilter', 'all')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $roleFilter === 'all' ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                All ({{ $roleCounts['all'] }})
+            </button>
+            
+            <button wire:click="$set('roleFilter', 'student')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $roleFilter === 'student' ? 'bg-purple-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                Students ({{ $roleCounts['student'] }})
+            </button>
+            
+            <button wire:click="$set('roleFilter', 'faculty')" 
+                    class="px-4 py-2 rounded-md transition duration-200 {{ $roleFilter === 'faculty' ? 'bg-indigo-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300' }}">
+                Faculty ({{ $roleCounts['faculty'] }})
+            </button>
+        </div>
+
         <!-- Current Filter Display -->
-        @if($statusFilter !== 'all' || $search)
+        @if($statusFilter !== 'all' || $roleFilter !== 'all' || $search)
         <div class="text-sm text-gray-300">
             <span class="font-medium">Filters applied:</span>
             @if($search)
@@ -47,8 +67,13 @@
                 </span>
             @endif
             @if($statusFilter !== 'all')
-                <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                <span class="inline-block bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs mr-2">
                     Status: {{ ucfirst($statusFilter) }}
+                </span>
+            @endif
+            @if($roleFilter !== 'all')
+                <span class="inline-block bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs">
+                    Role: {{ ucfirst($roleFilter) }}
                 </span>
             @endif
         </div>
@@ -58,11 +83,21 @@
     <!-- Table Box -->
 <div class="bg-white shadow-lg rounded-lg overflow-hidden">
     <div class="overflow-x-auto p-4">
-               <!-- Results Count -->
+            <!-- Results Count -->
             <div class="mb-4 text-sm text-gray-600">
                 Showing {{ $students->count() }} of {{ $students->total() }} users
-                @if($statusFilter !== 'all')
-                    (filtered by: {{ ucfirst($statusFilter) }} status)
+                @if($statusFilter !== 'all' || $roleFilter !== 'all')
+                    (filtered by:
+                    @if($statusFilter !== 'all')
+                        {{ ucfirst($statusFilter) }} status
+                    @endif
+                    @if($statusFilter !== 'all' && $roleFilter !== 'all')
+                        ,
+                    @endif
+                    @if($roleFilter !== 'all')
+                        {{ ucfirst($roleFilter) }} role
+                    @endif
+                    )
                 @endif
             </div>
             @if($students->count() > 0)
@@ -75,6 +110,7 @@
                     <th class="px-4 py-3">Last Name</th>
                     <th class="px-4 py-3">Email</th>
                     <th class="px-4 py-3">Status</th>
+                    <th class="px-4 py-3">Role</th>
                     <th class="px-4 py-3">Actions</th>
                 </tr>
             </thead>
@@ -100,6 +136,7 @@
                             <span class="px-3 py-1 text-red-700 bg-red-200 rounded-full">Inactive</span>
                         @endif
                     </td>
+                    <td class="px-4 py-3">{{ $student->role }}</td>
                     <td class="px-4 py-3 flex gap-2">
                             <a href="{{ route('students.show', $student->user_id) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md">
                                 👁 View
@@ -118,18 +155,18 @@
                 @endforeach
             </tbody>
         </table>
-                    @else
+              @else
             <!-- No Results Found -->
             <div class="text-center py-8">
                 <div class="text-gray-500 text-lg mb-2">📋 No users found</div>
                 <p class="text-gray-400">
-                    @if($search || $statusFilter !== 'all')
+                    @if($search || $statusFilter !== 'all' || $roleFilter !== 'all')
                         Try adjusting your search or filter criteria.
                     @else
                         No users have been added yet.
                     @endif
                 </p>
-                @if($search || $statusFilter !== 'all')
+                @if($search || $statusFilter !== 'all' || $roleFilter !== 'all')
                 <button wire:click="clearFilters" 
                         class="mt-3 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
                     Clear Filters

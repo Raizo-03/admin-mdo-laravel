@@ -56,7 +56,7 @@
             <nav class="flex flex-col gap-3 mb-6">
                 <a href="{{ route('users.students.index') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/usermanager_icon.png') }}" alt="Clinic Logo" class="w-5 h-5">
-                    Students
+                    Users
                 </a>
                 <a href="{{ route('users.admins.index') }}" class="flex items-center gap-3 hover:bg-[#89a0df] p-1 rounded">
                     <img src="{{ asset('images/inactive_user.png') }}" alt="Clinic Logo" class="w-5 h-5">
