@@ -3,6 +3,28 @@
         <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search bookings..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
     </div>
 
+        {{-- Filter Dates --}}
+    <div class="flex items-center gap-4 mb-4">
+        <input type="date" wire:model="tempDateFilter" class="px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white-900 text-black-900">
+        
+        <button wire:click="applyDateFilter" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md">
+            Apply Filter
+        </button>
+        
+        @if($dateFilter)
+            <div class="text-gray-400">
+                Filtering by date: {{ $dateFilter }}
+            </div>
+        @endif
+        
+        @if($dateFilter)
+        <button wire:click="resetDateFilter" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md">
+            Clear Filter
+        </button>
+        @endif
+
+    </div>
+
     <div class="flex items-center gap-4 mb-4">
         <div class="bg-white shadow-md rounded-lg px-3 py-2 h-55 flex items-center w-full">
             <div class="mr-2">

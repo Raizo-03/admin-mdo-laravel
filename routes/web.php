@@ -121,7 +121,7 @@ Route::get('appointments/confirmed/{id}', [AppointmentController::class, 'show']
 //view completed appointments
 Route::get('appointments/completed/{id}', [AppointmentController::class, 'showCompleted'])->name('appointments.completed.show');
 
-//view completed appointments
+//view no show appointments
 Route::get('appointments/noshow/{id}', [AppointmentController::class, 'showNoShow'])->name('appointments.noShow.show');
 
 
