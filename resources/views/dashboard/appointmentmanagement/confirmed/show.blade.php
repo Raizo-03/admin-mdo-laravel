@@ -71,14 +71,14 @@
         </div>
 
       <!-- Vital Signs Section -->
-        <div class="bg-white p-6 rounded-lg shadow-lg space-y-6 mt-6">
+        <div class="bg-white p-2 rounded-lg shadow-lg space-y-2 mt-2">
             <h2 class="text-xl font-semibold text-gray-700 mb-4">Vital Signs</h2>
 
             @if ($appointment->vitalSigns)
                 <div id="vitalSignsDisplay" class="space-y-3">
                     <div class="flex justify-between items-center">
                         <p><strong>Attending Nurse:</strong> {{ $appointment->vitalSigns->attending_nurse }}</p>
-                        <button onclick="document.getElementById('vitalSignsForm').classList.remove('hidden'); document.getElementById('vitalSignsDisplay').classList.add('hidden');" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-2 rounded">Edit</button>
+                        {{-- <button onclick="document.getElementById('vitalSignsForm').classList.remove('hidden'); document.getElementById('vitalSignsDisplay').classList.add('hidden');" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-2 rounded">Edit</button> --}}
                     </div>
                     <p><strong>Height:</strong> {{ $appointment->vitalSigns->height_cm }} cm</p>
                     <p><strong>Weight:</strong> {{ $appointment->vitalSigns->weight_kg }} kg</p>
@@ -132,14 +132,14 @@
 
 
         <!-- Medical Records Section -->
-<div class="bg-white p-6 rounded-lg shadow-lg space-y-6 mt-6">
+<div class="bg-white p-2 rounded-lg shadow-lg space-y-6 mt-2">
     <h2 class="text-xl font-semibold text-gray-700 mb-4">Medical Records</h2>
 
     @if ($appointment->medicalRecord)
         <div id="medicalRecordDisplay" class="space-y-3">
             <div class="flex justify-between items-center">
                 <p><strong>Attending Doctor:</strong> {{ $appointment->medicalRecord->doctor }}</p>
-                <button onclick="document.getElementById('medicalRecordForm').classList.remove('hidden'); document.getElementById('medicalRecordDisplay').classList.add('hidden');" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-2 rounded">Edit</button>
+                {{-- <button onclick="document.getElementById('medicalRecordForm').classList.remove('hidden'); document.getElementById('medicalRecordDisplay').classList.add('hidden');" class="bg-yellow-500 hover:bg-yellow-600 text-white px-8 py-2 rounded">Edit</button> --}}
             </div>
             <div>
                 <p class="font-medium text-gray-600 mb-1">Complaint:</p>
