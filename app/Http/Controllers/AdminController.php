@@ -137,7 +137,7 @@ public function updateInfo(Request $request)
     
     $request->validate([
         'title' => 'nullable|string|max:255',
-        'username' => 'required|string|max:50|unique:admins,username,' . $admin->admin_id . ',admin_id',
+        'username' => 'required|string|max:50|unique:Admins,username,' . $admin->admin_id . ',admin_id',
         'password' => 'nullable|string|min:8|confirmed',
     ]);
 
