@@ -133,22 +133,30 @@ public function updateProfilePicture(Request $request)
 
 public function updateInfo(Request $request)
 {
+    $admin = Auth::guard('admin')->user();
+    
     $request->validate([
-        'name' => 'nullable|string|max:255',
         'title' => 'nullable|string|max:255',
+        'username' => 'required|string|max:50|unique:admins,username,' . $admin->admin_id . ',admin_id',
+        'password' => 'nullable|string|min:8|confirmed',
     ]);
 
-    $admin = Auth::guard('admin')->user();
-
-    $admin->name = $request->input('name');
+    // Update title and username
     $admin->title = $request->input('title');
+    $admin->username = $request->input('username');
+    
+    // Only update password if provided
+    if ($request->filled('password')) {
+        $admin->password = Hash::make($request->input('password'));
+    }
+    
     $admin->save();
 
     // Flashing a success message to session
     return redirect()->back()->with('info_updated', [
         'type' => 'success',
         'title' => 'Success!',
-        'text' => 'Your name and title have been updated successfully!',
+        'text' => 'Your profile information has been updated successfully!',
     ]);
 }
 
