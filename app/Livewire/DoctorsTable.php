@@ -15,6 +15,7 @@ class DoctorsTable extends Component
     public $search = '';
     public $statusFilter = 'all'; // New property for status filter
     public $username = '';
+    public $name = ''; // Added missing name property
     public $email = '';
     public $password = '';
     public $isModalOpen = false;
@@ -29,6 +30,7 @@ class DoctorsTable extends Component
 
     protected $rules = [
         'username' => 'required|string|max:255|unique:Admins,username',
+        'name' => 'required|string|max:255',
         'email' => 'required|email|unique:Admins,email',
         'password' => 'required|string|min:3',
     ];
@@ -59,6 +61,7 @@ class DoctorsTable extends Component
     public function resetInputFields()
     {
         $this->username = '';
+        $this->name = ''; // Added name reset
         $this->email = '';
         $this->password = '';
     }
@@ -69,11 +72,12 @@ class DoctorsTable extends Component
 
         Admin::create([
             'username' => $this->username,
+            'name' => $this->name, 
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'role' => 'doctor'
         ]);
-
+        $this->dispatch('doctor-added')->to(null);
         session()->flash('message', 'Doctor added successfully.');
         $this->closeModal();
     }
@@ -152,7 +156,7 @@ class DoctorsTable extends Component
                 'status' => $this->newStatus
             ]);
             
-            $this->dispatch('status-updated');
+        $this->dispatch('status-updated')->to(null);
         }
 
         $this->closeStatusModal();

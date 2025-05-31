@@ -16,6 +16,7 @@ class NursesTable extends Component
 
     public $search = '';
     public $username = '';
+    public $name = ''; // Added missing name property
     public $email = '';
     public $password = '';
     public $isModalOpen = false;
@@ -29,6 +30,7 @@ class NursesTable extends Component
 
     protected $rules = [
         'username' => 'required|string|max:255|unique:Admins,username',
+        'name' => 'required|string|max:255',
         'email' => 'required|email|unique:Admins,email',
         'password' => 'required|string|min:3',
     ];
@@ -54,6 +56,7 @@ class NursesTable extends Component
     public function resetInputFields()
     {
         $this->username = '';
+        $this->name = ''; // Added name reset
         $this->email = '';
         $this->password = '';
     }
@@ -64,12 +67,13 @@ class NursesTable extends Component
 
         Admin::create([
             'username' => $this->username,
+            'name' => $this->name, // Ensure name is included
             'email' => $this->email,
             'password' => Hash::make($this->password),
             'role' => 'nurse'
         ]);
-
-        session()->flash('message', 'Doctor added successfully.');
+         $this->dispatch('doctor-added')->to(null);
+        session()->flash('message', 'Nurse added successfully.');
         $this->closeModal();
     }
 

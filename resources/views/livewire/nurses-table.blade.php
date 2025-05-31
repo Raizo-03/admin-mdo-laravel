@@ -107,12 +107,10 @@
                         <td class="px-4 py-3">{{ $admin->email }}</td>
                        <td class="px-4 py-3"> 
                         @if($admin->status == 'active')
-                            <span class="px-3 py-1 text-green-700 bg-green-200 rounded-full">Active</span>
+                            <span class="px-3 py-1 text-green-700 bg-green-200 rounded-full">{{$admin->status}}</span>
                         @else
-                            <span class="px-3 py-1 text-red-700 bg-red-200 rounded-full">Inactive</span>
-                         {{ ucfirst($admin->status) }}
-
-                        @endif                         
+                            <span class="px-3 py-1 text-red-700 bg-red-200 rounded-full">{{$admin->status}}</span>
+                        @endif                          
                          </td>
                         <td class="px-4 py-3 flex gap-2">
                         <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md"
@@ -278,6 +276,14 @@
         });
     });
 
+        document.addEventListener('doctor-added', event => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Nurse Added',
+            text: 'The nurse was added successfully.',
+            confirmButtonColor: '#3085d6',
+        });
+    });
 </script>
 
           <!-- Add Nurse Modal -->
@@ -286,9 +292,15 @@
             <h2 class="text-gray-900 text-xl font-semibold mb-4">Add Nurse</h2>
             <form wire:submit.prevent="addNurse">
                 <div class="mb-3">
-                    <label for="username" class="block text-gray-700">Username:</label>
+                    <label for="username" class="block text-gray-700">Temporary Username:</label>
                     <input type="text" id="username" wire:model="username" class="w-full px-3 py-2 border rounded-md">
                     @error('username') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+            <div class="mb-3">
+                    <label for="name" class="block text-gray-700">Name:</label>
+                    <input type="text" id="name" wire:model="name" class="w-full px-3 py-2 border rounded-md">
+                    @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="mb-3">
@@ -298,7 +310,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="password" class="block text-gray-700">Password:</label>
+                    <label for="password" class="block text-gray-700">Temporary Password:</label>
                     <input type="password" id="password" wire:model="password" class="w-full px-3 py-2 border rounded-md">
                     @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
@@ -447,6 +459,7 @@ function openAddDoctorModal() {
     // Clear the modal fields before opening it
     document.getElementById('addDoctorUsername').value = '';
     document.getElementById('addDoctorEmail').value = '';
+    document.getElementById('addDoctorName').value = '';
     document.getElementById('addDoctorPassword').value = ''; // Clear password field
 
     // Show the modal

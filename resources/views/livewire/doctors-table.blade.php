@@ -108,11 +108,9 @@
                         <td class="px-4 py-3">{{ $admin->email }}</td>
                        <td class="px-4 py-3"> 
                         @if($admin->status == 'active')
-                            <span class="px-3 py-1 text-green-700 bg-green-200 rounded-full">Active</span>
+                            <span class="px-3 py-1 text-green-700 bg-green-200 rounded-full">{{$admin->status}}</span>
                         @else
-                            <span class="px-3 py-1 text-red-700 bg-red-200 rounded-full">Inactive</span>
-                         {{ ucfirst($admin->status) }}
-
+                            <span class="px-3 py-1 text-red-700 bg-red-200 rounded-full">{{$admin->status}}</span>
                         @endif                         
                          </td>
                         <td class="px-4 py-3 flex gap-2">
@@ -253,9 +251,15 @@
             <h2 class="text-gray-900 text-xl font-semibold mb-4">Add Doctor</h2>
             <form wire:submit.prevent="addDoctor">
                 <div class="mb-3">
-                    <label for="username" class="block text-gray-700">Username:</label>
+                    <label for="username" class="block text-gray-700">Temporary Username:</label>
                     <input type="text" id="username" wire:model="username" class="w-full px-3 py-2 border rounded-md">
                     @error('username') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="name" class="block text-gray-700">Name:</label>
+                    <input type="text" id="name" wire:model="name" class="w-full px-3 py-2 border rounded-md">
+                    @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
 
                 <div class="mb-3">
@@ -265,7 +269,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="password" class="block text-gray-700">Password:</label>
+                    <label for="password" class="block text-gray-700">Temporary Password:</label>
                     <input type="password" id="password" wire:model="password" class="w-full px-3 py-2 border rounded-md">
                     @error('password') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                 </div>
@@ -325,6 +329,14 @@
         });
     });
 
+        document.addEventListener('doctor-added', event => {
+        Swal.fire({
+            icon: 'success',
+            title: 'Doctor Added',
+            text: 'The doctor was added successfully.',
+            confirmButtonColor: '#3085d6',
+        });
+    });
 </script>
 
 </div>
@@ -447,6 +459,7 @@ document.getElementById('editAdminForm').addEventListener('submit', function(eve
 function openAddDoctorModal() {
     // Clear the modal fields before opening it
     document.getElementById('addDoctorUsername').value = '';
+    document.getElementById('addDoctorName').value = '';
     document.getElementById('addDoctorEmail').value = '';
     document.getElementById('addDoctorPassword').value = ''; // Clear password field
 
