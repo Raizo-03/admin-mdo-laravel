@@ -12,7 +12,7 @@
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-5">
         <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
             <div class="flex justify-between items-center">
-                <h2 class="text-base font-bold text-gray-800">Total Students</h2>
+                <h2 class="text-base font-bold text-gray-800">Total Users</h2>
                 <div class="p-2 bg-blue-100 rounded-full">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -20,6 +20,30 @@
                 </div>
             </div>
             <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\User::count() }}</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold text-gray-800">Total Students</h2>
+                <div class="p-2 bg-green-100 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+            </div>
+            <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\User::where('role', 'student')->count() }}</p>
+        </div>
+
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
+            <div class="flex justify-between items-center">
+                <h2 class="text-base font-bold text-gray-800">Total Faculty</h2>
+                <div class="p-2 bg-purple-100 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-9 w-9 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                    </svg>
+                </div>
+            </div>
+            <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\User::where('role', 'faculty')->count() }}</p>
         </div>
 
         <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
@@ -58,7 +82,7 @@
             <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\Feedback::count() }}</p>
         </div>
 
-        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
+        {{-- <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
             <div class="flex justify-between items-center">
                 <h2 class="text-base font-bold text-gray-800">Announcements</h2>
                 <div class="p-2 bg-green-100 rounded-full">
@@ -68,9 +92,9 @@
                 </div>
             </div>
             <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\Announcement::count() }}</p>
-        </div>
+        </div> --}}
 
-        <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
+        {{-- <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
             <div class="flex justify-between items-center">
                 <h2 class="text-base font-bold text-gray-800">Messages</h2>
                 <div class="p-2 bg-blue-100 rounded-full">
@@ -80,7 +104,7 @@
                 </div>
             </div>
             <p class="text-2xl font-bold text-gray-800 mt-1.5">{{ \App\Models\Message::where('status', 'unread')->count() }}</p>
-        </div>
+        </div> --}}
 
         <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow transform hover:-translate-y-1 duration-300">
             <div class="flex justify-between items-center">
@@ -106,6 +130,42 @@
             <p class="text-2xl font-bold text-gray-800 mt-1.5"> {{ \App\Models\Admin::where('role', 'nurse')->count() }}</p>
         </div>
     </div>
+
+        <div class="bg-white p-4 rounded-lg shadow-md mb-5">
+        <div class="flex justify-between items-center mb-3">
+            <h2 class="text-base font-bold text-gray-800">User Distribution by Type</h2>
+        </div>
+        <div class="flex flex-col md:flex-row items-center">
+            <div class="w-full md:w-1/2 h-64">
+                <canvas id="userTypesChart"></canvas>
+            </div>
+            <div class="w-full md:w-1/2 mt-4 md:mt-0 md:ml-6">
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Students</span>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold text-gray-800">{{ \App\Models\User::where('role', 'student')->count() }}</div>
+                            <div class="text-sm text-gray-500" id="studentPercentage">0%</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                        <div class="flex items-center">
+                            <div class="w-4 h-4 bg-purple-500 rounded-full mr-3"></div>
+                            <span class="text-gray-700 font-medium">Faculty</span>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-lg font-bold text-gray-800">{{ \App\Models\User::where('role', 'faculty')->count() }}</div>
+                            <div class="text-sm text-gray-500" id="facultyPercentage">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <div class="bg-white p-4 rounded-lg shadow-md">
     <div class="flex justify-between items-center mb-3">
         <h2 class="text-base font-bold text-gray-800">Monthly Reports for Medical & Dental Appointments</h2>
@@ -122,21 +182,6 @@
     </div>
 </div>
 
-<div class="bg-white p-4 rounded-lg shadow-md">
-    <div class="flex justify-between items-center mb-3">
-        <h2 class="text-base font-bold text-gray-800">Monthly Reports for App Usage of UMAK Students</h2>
-        <div class="relative">
-            <select id="timeFilter" class="block appearance-none bg-gray-100 border border-gray-300 text-gray-700 py-1 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-xs">
-                <option value="12" selected>Last 12 months</option>
-                <option value="6">Last 6 months</option>
-                <option value="3">Last 3 months</option>
-            </select>
-        </div>
-    </div>
-    <div class="h-64">
-        <canvas id="registrationsChart"></canvas>
-    </div>
-</div>
 
 <div class="bg-white p-4 rounded-lg shadow-md">
     <div class="flex justify-between items-center mb-3">
@@ -163,226 +208,310 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let appointmentsChart;
+   document.addEventListener('DOMContentLoaded', function() {
+    let appointmentsChart;
 
-        function fetchChartData(months = 12) {
-            $.ajax({
-                url: `/appointments-data?months=${months}`,
-                type: 'GET',
-                success: function(response) {
-                    updateChart(response.labels, response.medicalData, response.dentalData);
-                }
-            });
-        }
-
-        function updateChart(labels, medicalData, dentalData) {
-            const ctx = document.getElementById('appointmentsChart').getContext('2d');
-
-            if (appointmentsChart) {
-                appointmentsChart.destroy();
-            }
-
-            appointmentsChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                        {
-                            label: 'Medical Appointments',
-                            data: medicalData,
-                            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                            borderColor: 'rgba(54, 162, 235, 1)',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Dental Appointments',
-                            data: dentalData,
-                            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-                            borderColor: 'rgba(255, 99, 132, 1)',
-                            borderWidth: 1
-                        }
-                    ]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        x: {
-                            stacked: true
-                        },
-                        y: {
-                            beginAtZero: true,
-                            stacked: true
-                        }
-                    }
-                }
-            });
-        }
-
-        $('#timeFilter').change(function() {
-            let months = $(this).val();
-            fetchChartData(months);
-        });
-
-        // Load default chart
-        fetchChartData();
-    });
-
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    let registrationsChart;
-
-    function fetchRegistrationsChart(months = 12) {
+    function fetchChartData(months = 12) {
+        console.log('Fetching chart data for months:', months);
+        
         $.ajax({
-            url: `/registrations-data?months=${months}`,
+            url: `/appointments-data?months=${months}`,
             type: 'GET',
-            success: function (response) {
-                console.log("Fetched Data:", response); // Debugging
-                if (response.labels.length === 0 || response.data.length === 0) {
-                    console.warn("No data returned for the selected period.");
-                }
-                updateRegistrationsChart(response.labels, response.data);
+            dataType: 'json',
+            beforeSend: function() {
+                console.log('Sending AJAX request to:', `/appointments-data?months=${months}`);
             },
-            error: function (xhr, status, error) {
-                console.error("Failed to fetch registrations data:", status, error);
+            success: function(response) {
+                console.log('AJAX Success - Response received:', response);
+                
+                // Check if response has the expected structure
+                if (response && response.labels && response.medicalData && response.dentalData) {
+                    console.log('Valid response structure, updating chart...');
+                    updateChart(response.labels, response.medicalData, response.dentalData);
+                } else {
+                    console.error('Invalid response structure:', response);
+                    showError('Invalid data format received from server');
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', {
+                    status: status,
+                    error: error,
+                    responseText: xhr.responseText,
+                    statusCode: xhr.status
+                });
+                
+                showError(`Failed to load chart data: ${error || 'Unknown error'}`);
             }
         });
     }
 
-    function updateRegistrationsChart(labels, data) {
-        const ctx = document.getElementById('registrationsChart').getContext('2d');
+    function updateChart(labels, medicalData, dentalData) {
+        console.log('Updating chart with:', { labels, medicalData, dentalData });
+        
+        const chartElement = document.getElementById('appointmentsChart');
+        if (!chartElement) {
+            console.error('Chart element not found! Make sure you have <canvas id="appointmentsChart"></canvas> in your HTML');
+            return;
+        }
+        
+        const ctx = chartElement.getContext('2d');
 
-        if (registrationsChart) {
-            registrationsChart.destroy();
+        if (appointmentsChart) {
+            appointmentsChart.destroy();
         }
 
-        registrationsChart = new Chart(ctx, {
-            type: 'line',
+        // Validate data
+        if (!labels || labels.length === 0) {
+            showError('No data available for the selected period');
+            return;
+        }
+
+        appointmentsChart = new Chart(ctx, {
+            type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{
-                    label: 'Active User Registrations',
-                    data: data,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-                    pointRadius: 4,
-                    fill: true,
-                    tension: 0.3
-                }]
+                datasets: [
+                    {
+                        label: 'Medical Appointments',
+                        data: medicalData || [],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Dental Appointments',
+                        data: dentalData || [],
+                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                plugins: {
-                    legend: { display: true, position: 'top' }
-                },
                 scales: {
                     x: {
-                        title: {
-                            display: true,
-                            text: 'Month & Year'
-                        },
-                        ticks: {
-                            autoSkip: true,
-                            maxTicksLimit: 6,
-                            maxRotation: 0,
-                            minRotation: 0
-                        }
+                        stacked: true
                     },
                     y: {
                         beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Number of Active Registrations'
+                        stacked: true,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(value) {
+                                if (Number.isInteger(value)) {
+                                    return value;
+                                }
+                            }
                         }
                     }
                 }
             }
         });
+        
+        console.log('Chart created successfully');
     }
 
-    $('#timeFilter').change(function () {
+    function showError(message) {
+        const chartContainer = document.getElementById('appointmentsChart');
+        if (chartContainer) {
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `
+                <div style="text-align: center; padding: 20px; color: #dc3545; border: 1px solid #dc3545; border-radius: 4px; margin: 10px 0;">
+                    <p><strong>Error:</strong> ${message}</p>
+                    <button onclick="fetchChartData()" style="padding: 8px 16px; margin-top: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer;">
+                        Retry
+                    </button>
+                </div>
+            `;
+            chartContainer.parentNode.insertBefore(errorDiv, chartContainer);
+        }
+        console.error('Chart Error:', message);
+    }
+
+    // Check if jQuery is loaded
+    if (typeof $ === 'undefined') {
+        console.error('jQuery is not loaded! Make sure to include jQuery before this script.');
+        showError('jQuery is not loaded');
+        return;
+    }
+
+    // Check if Chart.js is loaded
+    if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not loaded! Make sure to include Chart.js before this script.');
+        showError('Chart.js is not loaded');
+        return;
+    }
+
+    $('#timeFilter').change(function() {
         let months = $(this).val();
-        fetchRegistrationsChart(months);
+        console.log('Time filter changed to:', months);
+        fetchChartData(months);
     });
 
     // Load default chart
-    fetchRegistrationsChart();
+    console.log('Loading default chart...');
+    fetchChartData();
 });
 
-document.addEventListener('DOMContentLoaded', function () {
-    function fetchFeedbackChart(months = 12) {
-        $.ajax({
-            url: "/feedback/chart-data",
-            type: "GET",
-            data: { months: months },
-            success: function (data) {
-                let labels = data.map(item => item.month);
-                let ratings = [1, 2, 3, 4, 5]; // Star ratings
-                let ratingCounts = ratings.map(rating => data.map(item => item.ratings[rating] || 0));
+ document.addEventListener('DOMContentLoaded', function () {
+            function fetchFeedbackChart(months = 12) {
+                $.ajax({
+                    url: "/feedback/chart-data",
+                    type: "GET",
+                    data: { months: months },
+                    success: function (data) {
+                        console.log('Chart data received:', data); // Debug log
+                        
+                        let labels = data.map(item => item.month);
+                        let ratings = [1, 2, 3, 4, 5]; // Star ratings
+                        let ratingCounts = ratings.map(rating => data.map(item => item.ratings[rating] || 0));
 
-                let ctx = document.getElementById("feedbackChart").getContext("2d");
+                        let ctx = document.getElementById("feedbackChart").getContext("2d");
 
-                // Destroy previous chart instance if it exists
-                if (window.feedbackChartInstance) {
-                    window.feedbackChartInstance.destroy();
-                }
+                        // Destroy previous chart instance if it exists
+                        if (window.feedbackChartInstance) {
+                            window.feedbackChartInstance.destroy();
+                        }
 
-                window.feedbackChartInstance = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: ratings.map((rating, index) => ({
-                            label: `${rating}-Star Ratings`,
-                            data: ratingCounts[index],
-                            backgroundColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 0.6)`, 
-                            borderColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 1)`,
-                            borderWidth: 1
-                        }))
-                    },
-                 options: {
-                        responsive: true,
-                        plugins: {
-                            legend: {
-                                display: true,
-                                position: 'top',
-                                align: 'center', // Centers the legend
-                                labels: {
-                                    boxWidth: 15,
-                                    padding: 10
-                                }
-                            }
-                        },
-                        scales: {
-                            y: { beginAtZero: true, stacked: true },
-                            x: {
-                                stacked: true,
-                                ticks: {
-                                    callback: function(value, index) {
-                                        let date = new Date(labels[index] + "-01");
-                                        return date.toLocaleString('en-US', { month: 'long', year: 'numeric' });
+                        window.feedbackChartInstance = new Chart(ctx, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: ratings.map((rating, index) => ({
+                                    label: `${rating}-Star Ratings`,
+                                    data: ratingCounts[index],
+                                    backgroundColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 0.6)`, 
+                                    borderColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 1)`,
+                                    borderWidth: 1,
+                                    maxBarThickness: 60
+                                }))
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        display: true,
+                                        position: 'top',
+                                        align: 'center',
+                                        labels: {
+                                            boxWidth: 15,
+                                            padding: 10
+                                        }
+                                    }
+                                },
+                                scales: {
+                                    y: { 
+                                        beginAtZero: true, 
+                                        stacked: true,
+                                        ticks: {
+                                            stepSize: 1,
+                                            callback: function(value) {
+                                                if (Number.isInteger(value)) {
+                                                    return value;
+                                                }
+                                            }
+                                        }
+                                    },
+                                    x: {
+                                        stacked: true,
+                                        categoryPercentage: 0.8,
+                                        barPercentage: 0.9,
+                                        ticks: {
+                                            callback: function(value, index) {
+                                                let date = new Date(labels[index] + "-01");
+                                                return date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+                                            }
+                                        }
                                     }
                                 }
                             }
-                        }
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching chart data:', error);
                     }
                 });
             }
-        });
-    }
 
-    fetchFeedbackChart();
+            fetchFeedbackChart();
 
-    document.getElementById("timeFilter").addEventListener("change", function () {
-        fetchFeedbackChart(this.value);
+
+
+     $('#timeFilter').change(function() {
+        let months = $(this).val();
+        console.log('Time filter changed to:', months);
+        fetchFeedbackChart(months);
     });
+
 });
 
-
+document.addEventListener('DOMContentLoaded', function() {
+    // User Types Donut Chart
+    const userTypesCtx = document.getElementById('userTypesChart').getContext('2d');
+    
+    const studentsCount = {{ \App\Models\User::where('role', 'student')->count() }};
+    const facultyCount = {{ \App\Models\User::where('role', 'faculty')->count() }};
+    const totalUsers = studentsCount + facultyCount;
+    
+    // Calculate percentages
+    const studentPercentage = totalUsers > 0 ? Math.round((studentsCount / totalUsers) * 100) : 0;
+    const facultyPercentage = totalUsers > 0 ? Math.round((facultyCount / totalUsers) * 100) : 0;
+    
+    // Update percentage displays
+    document.getElementById('studentPercentage').textContent = studentPercentage + '%';
+    document.getElementById('facultyPercentage').textContent = facultyPercentage + '%';
+    
+    new Chart(userTypesCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Students', 'Faculty'],
+            datasets: [{
+                data: [studentsCount, facultyCount],
+                backgroundColor: [
+                    'rgba(34, 197, 94, 0.8)',   // Green for students
+                    'rgba(147, 51, 234, 0.8)'   // Purple for faculty
+                ],
+                borderColor: [
+                    'rgba(34, 197, 94, 1)',
+                    'rgba(147, 51, 234, 1)'
+                ],
+                borderWidth: 2,
+                hoverBackgroundColor: [
+                    'rgba(34, 197, 94, 0.9)',
+                    'rgba(147, 51, 234, 0.9)'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    display: false // We're using custom legend on the right
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            const label = context.label || '';
+                            const value = context.parsed;
+                            const percentage = totalUsers > 0 ? Math.round((value / totalUsers) * 100) : 0;
+                            return `${label}: ${value} (${percentage}%)`;
+                        }
+                    }
+                }
+            },
+            cutout: '60%', // Makes it a donut chart
+            animation: {
+                animateRotate: true,
+                animateScale: true
+            }
+        }
+    });
+});
 
 
 
