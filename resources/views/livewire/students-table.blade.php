@@ -142,14 +142,15 @@
                                 👁 View
                             </a>
 
-                        <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-md"
-                            onclick="openStatusModal('{{ $student->user_id }}', '{{ $student->first_name }}', '{{ $student->status }}', '{{ $student->student_id }}')">
-                            ⚡Status
-                        </button>
                         <button class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded-md"
                             onclick="openEditModal('{{ $student->user_id }}')">
                             ✏ Edit
                         </button>
+                        <button class="bg-yellow-600 hover:bg-yellow-700 text-white px-3 py-1 rounded-md"
+                            onclick="openStatusModal('{{ $student->user_id }}', '{{ $student->first_name }}', '{{ $student->status }}', '{{ $student->student_id }}')">
+                            ⚡Status
+                        </button>
+
                     </td>
                 </tr>
                 @endforeach

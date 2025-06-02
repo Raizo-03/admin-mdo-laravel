@@ -224,7 +224,7 @@
                     @if ($isStatusModalOpen)
             <div class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div class="bg-white p-6 rounded-lg shadow-lg w-96">
-                    <h2 class="text-gray-900 text-xl font-semibold mb-4">Change Doctor Status</h2>
+                    <h2 class="text-gray-900 text-xl font-semibold mb-4">Change Admin Status</h2>
                     <p class="text-gray-700 mb-4">Are you sure you want to change the status of <span class="font-bold">{{ $statusUsername }}</span>?</p>
                     
                     <div class="mb-4">
