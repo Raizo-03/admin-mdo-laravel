@@ -150,7 +150,8 @@ Route::put('users/students', [UserController::class, 'update'])->name('dashboard
 
 //Appointment Export
 Route::get('/appointments/export', [App\Http\Controllers\ConfirmedAppointmentExportController::class, 'export'])->name('confirmedappointments.export');
-
+Route::get('/appointments/export/completed', [App\Http\Controllers\CompletedAppointmentExportController::class, 'export'])->name('completedappointments.export');
+Route::get('/appointments/export/noshow', [App\Http\Controllers\NoshowAppointmentExportController::class, 'export'])->name('noshowappointments.export');
 
 
 ?>
