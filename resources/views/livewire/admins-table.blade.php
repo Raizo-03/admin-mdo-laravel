@@ -166,6 +166,28 @@
                     </button>
                 </div>
             </div>
+            <div class="border-t pt-4 pb-2 float-right pr-10">
+                <div class="flex justify-center items-center space-x-4">
+                    <h3 class="text-sm font-semibold text-gray-700">Export Data:</h3>
+                    <button 
+                        onclick="downloadData('csv')" 
+                        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md flex items-center space-x-2 transition-colors duration-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span>Download CSV</span>
+                    </button>
+                    <button 
+                        onclick="downloadData('excel')" 
+                        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center space-x-2 transition-colors duration-200">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                        <span>Download Excel</span>
+                    </button>
+                </div>
+            </div>
+
 
             <!-- View User Modal -->
             <div id="viewModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden">
@@ -367,3 +389,108 @@ document.getElementById('editAdminForm').addEventListener('submit', function(eve
         });
     });
 </script>
+
+<script>
+       function downloadData(format) {
+    // Show loading alert
+    Swal.fire({
+        title: 'Preparing Download...',
+        text: `Generating ${format.toUpperCase()} file, please wait.`,
+        icon: 'info',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Get current filter values (adjust these selectors based on your actual HTML structure)
+    const searchValue = document.querySelector('input[wire\\:model="search"]') ? 
+        document.querySelector('input[wire\\:model="search"]').value : '';
+    const statusFilter = '{{ $statusFilter ?? "all" }}';
+    const roleFilter = '{{ $roleFilter ?? "all" }}';
+    
+    // Build URL with parameters
+    const params = new URLSearchParams();
+    params.append('format', format);
+    
+    if (searchValue) {
+        params.append('search', searchValue);
+    }
+    if (statusFilter && statusFilter !== 'all') {
+        params.append('status', statusFilter);
+    }
+    if (roleFilter && roleFilter !== 'all') {
+        params.append('role', roleFilter);
+    }
+    
+    const downloadUrl = `{{ route('admins.export') }}?${params.toString()}`;
+
+    // Use fetch for better error handling
+    fetch(downloadUrl, {
+        method: 'GET',
+        headers: {
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => {
+        // Check if response is ok
+        if (!response.ok) {
+            return response.text().then(text => {
+                throw new Error(`HTTP ${response.status}: ${text}`);
+            });
+        }
+        
+        // Check content type
+        const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('text/csv')) {
+            return response.text().then(text => {
+                console.error('Unexpected response:', text);
+                throw new Error('Invalid response format - expected CSV');
+            });
+        }
+        
+        return response.blob();
+    })
+    .then(blob => {
+        // Create download link
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = url;
+        
+        // Set filename with current date
+        const now = new Date();
+        const dateStr = now.toISOString().split('T')[0];
+        const filename = format === 'excel' ? `Admins_${dateStr}.csv` : `Admins_${dateStr}.csv`;
+        a.download = filename;
+        
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+
+        // Show success alert
+        Swal.fire({
+            title: 'Download Complete!',
+            text: `Your ${format.toUpperCase()} file has been downloaded successfully.`,
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false
+        });
+    })
+    .catch(error => {
+        console.error('Download error:', error);
+        
+        // Show detailed error alert
+        Swal.fire({
+            title: 'Download Failed',
+            text: `Error: ${error.message}. Please check the console for more details.`,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+    </script>

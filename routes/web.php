@@ -153,5 +153,15 @@ Route::get('/appointments/export', [App\Http\Controllers\ConfirmedAppointmentExp
 Route::get('/appointments/export/completed', [App\Http\Controllers\CompletedAppointmentExportController::class, 'export'])->name('completedappointments.export');
 Route::get('/appointments/export/noshow', [App\Http\Controllers\NoshowAppointmentExportController::class, 'export'])->name('noshowappointments.export');
 
+//User Export
+Route::get('/students/export', [App\Http\Controllers\UserExportController::class, 'export'])->name('users.export');
+
+
+//Admin Export
+
+
+Route::get('/admins/export', [App\Http\Controllers\AdminExportController::class, 'export'])->name('admins.export');
+Route::get('/nurses/export', [App\Http\Controllers\NurseExportController::class, 'export'])->name('nurses.export');
+Route::get('/doctors/export', [App\Http\Controllers\DoctorExportController::class, 'export'])->name('doctors.export');
 
 ?>
