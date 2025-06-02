@@ -131,50 +131,66 @@
         </div>
     </div>
 
-        <div class="bg-white p-4 rounded-lg shadow-md mb-5">
-        <div class="flex justify-between items-center mb-3">
-            <h2 class="text-base font-bold text-gray-800">User Distribution by Type</h2>
+   <!-- Add download buttons to each chart section -->
+
+<!-- User Distribution Chart Section -->
+<div class="bg-white p-4 rounded-lg shadow-md mb-5">
+    <div class="flex justify-between items-center mb-3">
+        <h2 class="text-base font-bold text-gray-800">User Distribution by Type</h2>
+        <!-- Add download button -->
+        <button onclick="downloadChartContainer('userTypesChart', 'User_Distribution_Chart')" 
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">
+            <i class="fas fa-download mr-1"></i> Download PNG
+        </button>
+    </div>
+    <div class="flex flex-col md:flex-row items-center">
+        <div class="w-full md:w-1/2 h-64">
+            <canvas id="userTypesChart"></canvas>
         </div>
-        <div class="flex flex-col md:flex-row items-center">
-            <div class="w-full md:w-1/2 h-64">
-                <canvas id="userTypesChart"></canvas>
-            </div>
-            <div class="w-full md:w-1/2 mt-4 md:mt-0 md:ml-6">
-                <div class="space-y-3">
-                    <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                        <div class="flex items-center">
-                            <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
-                            <span class="text-gray-700 font-medium">Students</span>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-lg font-bold text-gray-800">{{ \App\Models\User::where('role', 'student')->count() }}</div>
-                            <div class="text-sm text-gray-500" id="studentPercentage">0%</div>
-                        </div>
+        <div class="w-full md:w-1/2 mt-4 md:mt-0 md:ml-6">
+            <div class="space-y-3">
+                <div class="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-green-500 rounded-full mr-3"></div>
+                        <span class="text-gray-700 font-medium">Students</span>
                     </div>
-                    <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
-                        <div class="flex items-center">
-                            <div class="w-4 h-4 bg-purple-500 rounded-full mr-3"></div>
-                            <span class="text-gray-700 font-medium">Faculty</span>
-                        </div>
-                        <div class="text-right">
-                            <div class="text-lg font-bold text-gray-800">{{ \App\Models\User::where('role', 'faculty')->count() }}</div>
-                            <div class="text-sm text-gray-500" id="facultyPercentage">0%</div>
-                        </div>
+                    <div class="text-right">
+                        <div class="text-lg font-bold text-gray-800">{{ \App\Models\User::where('role', 'student')->count() }}</div>
+                        <div class="text-sm text-gray-500" id="studentPercentage">0%</div>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+                    <div class="flex items-center">
+                        <div class="w-4 h-4 bg-purple-500 rounded-full mr-3"></div>
+                        <span class="text-gray-700 font-medium">Faculty</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-lg font-bold text-gray-800">{{ \App\Models\User::where('role', 'faculty')->count() }}</div>
+                        <div class="text-sm text-gray-500" id="facultyPercentage">0%</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-<div class="bg-white p-4 rounded-lg shadow-md">
+<!-- Monthly Appointments Chart Section -->
+<div class="bg-white p-4 rounded-lg shadow-md mb-5">
     <div class="flex justify-between items-center mb-3">
         <h2 class="text-base font-bold text-gray-800">Monthly Reports for Medical & Dental Appointments</h2>
-        <div class="relative">
-            <select id="timeFilter" class="block appearance-none bg-gray-100 border border-gray-300 text-gray-700 py-1 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-xs">
-                <option value="12">Last 12 months</option>
-                <option value="6">Last 6 months</option>
-                <option value="3">Last 3 months</option>
-            </select>
+        <div class="flex items-center space-x-2">
+            <div class="relative">
+                <select id="timeFilter" class="block appearance-none bg-gray-100 border border-gray-300 text-gray-700 py-1 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-xs">
+                    <option value="12">Last 12 months</option>
+                    <option value="6">Last 6 months</option>
+                    <option value="3">Last 3 months</option>
+                </select>
+            </div>
+            <!-- Add download button -->
+            <button onclick="downloadChart('appointmentsChart', 'Appointments_Chart')" 
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">
+                <i class="fas fa-download mr-1"></i> Download PNG
+            </button>
         </div>
     </div>
     <div class="h-64">
@@ -182,16 +198,23 @@
     </div>
 </div>
 
-
+<!-- Monthly Feedback Chart Section -->
 <div class="bg-white p-4 rounded-lg shadow-md">
     <div class="flex justify-between items-center mb-3">
         <h2 class="text-base font-bold text-gray-800">Monthly Feedback Reports</h2>
-        <div class="relative">
-            <select id="timeFilter" class="block appearance-none bg-gray-100 border border-gray-300 text-gray-700 py-1 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-xs">
-                <option value="12" selected>Last 12 months</option>
-                <option value="6">Last 6 months</option>
-                <option value="3">Last 3 months</option>
-            </select>
+        <div class="flex items-center space-x-2">
+            <div class="relative">
+                <select id="feedbackTimeFilter" class="block appearance-none bg-gray-100 border border-gray-300 text-gray-700 py-1 px-3 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500 text-xs">
+                    <option value="12" selected>Last 12 months</option>
+                    <option value="6">Last 6 months</option>
+                    <option value="3">Last 3 months</option>
+                </select>
+            </div>
+            <!-- Add download button -->
+            <button onclick="downloadChart('feedbackChart', 'Feedback_Chart')" 
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded text-xs">
+                <i class="fas fa-download mr-1"></i> Download PNG
+            </button>
         </div>
     </div>
     <div class="h-64">
@@ -199,18 +222,125 @@
     </div>
 </div>
 
+<!-- Add Font Awesome for icons (if not already included) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-
-</div>
-
+<!-- Add html2canvas library for capturing entire divs -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
-<script>
-   document.addEventListener('DOMContentLoaded', function() {
-    let appointmentsChart;
 
+<script>
+// Global chart instances
+let appointmentsChart;
+let userTypesChart;
+
+// Function to download chart as PNG
+function downloadChart(canvasId, filename) {
+    try {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) {
+            alert('Chart not found. Please make sure the chart is loaded.');
+            return;
+        }
+
+        // Create a temporary canvas with white background
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        // Set canvas dimensions
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        
+        // Fill with white background
+        tempCtx.fillStyle = 'white';
+        tempCtx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+        
+        // Draw the chart on top of white background
+        tempCtx.drawImage(canvas, 0, 0);
+        
+        // Create download link
+        const link = document.createElement('a');
+        link.download = `${filename}_${new Date().toISOString().split('T')[0]}.png`;
+        link.href = tempCanvas.toDataURL('image/png');
+        
+        // Trigger download
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        console.log(`Chart downloaded: ${link.download}`);
+    } catch (error) {
+        console.error('Error downloading chart:', error);
+        alert('Failed to download chart. Please try again.');
+    }
+}
+
+// Function to download entire chart container as PNG (including legends and stats)
+function downloadChartContainer(containerId, filename) {
+    try {
+        const container = document.querySelector(`#${containerId}`).closest('.bg-white');
+        if (!container) {
+            alert('Chart container not found. Please make sure the chart is loaded.');
+            return;
+        }
+
+        // Use html2canvas library to capture the entire div
+        html2canvas(container, {
+            backgroundColor: '#ffffff',
+            scale: 2, // Higher resolution
+            useCORS: true,
+            allowTaint: false,
+            height: container.offsetHeight,
+            width: container.offsetWidth,
+            scrollX: 0,
+            scrollY: 0
+        }).then(canvas => {
+            // Create download link
+            const link = document.createElement('a');
+            link.download = `${filename}_${new Date().toISOString().split('T')[0]}.png`;
+            link.href = canvas.toDataURL('image/png');
+            
+            // Trigger download
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            console.log(`Chart container downloaded: ${link.download}`);
+        }).catch(error => {
+            console.error('Error capturing chart container:', error);
+            // Fallback to canvas-only download
+            downloadChart(containerId, filename);
+        });
+    } catch (error) {
+        console.error('Error downloading chart container:', error);
+        // Fallback to canvas-only download
+        downloadChart(containerId, filename);
+    }
+}
+
+// Function to download all charts at once
+function downloadAllCharts() {
+    const charts = [
+        { id: 'userTypesChart', name: 'User_Distribution_Chart', isContainer: true },
+        { id: 'appointmentsChart', name: 'Appointments_Chart', isContainer: false },
+        { id: 'feedbackChart', name: 'Feedback_Chart', isContainer: false }
+    ];
+    
+    charts.forEach((chart, index) => {
+        setTimeout(() => {
+            if (chart.isContainer) {
+                downloadChartContainer(chart.id, chart.name);
+            } else {
+                downloadChart(chart.id, chart.name);
+            }
+        }, index * 1000); // Delay each download by 1 second
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Appointments Chart Logic
     function fetchChartData(months = 12) {
         console.log('Fetching chart data for months:', months);
         
@@ -224,7 +354,6 @@
             success: function(response) {
                 console.log('AJAX Success - Response received:', response);
                 
-                // Check if response has the expected structure
                 if (response && response.labels && response.medicalData && response.dentalData) {
                     console.log('Valid response structure, updating chart...');
                     updateChart(response.labels, response.medicalData, response.dentalData);
@@ -251,7 +380,7 @@
         
         const chartElement = document.getElementById('appointmentsChart');
         if (!chartElement) {
-            console.error('Chart element not found! Make sure you have <canvas id="appointmentsChart"></canvas> in your HTML');
+            console.error('Chart element not found!');
             return;
         }
         
@@ -261,7 +390,6 @@
             appointmentsChart.destroy();
         }
 
-        // Validate data
         if (!labels || labels.length === 0) {
             showError('No data available for the selected period');
             return;
@@ -331,20 +459,20 @@
         console.error('Chart Error:', message);
     }
 
-    // Check if jQuery is loaded
+    // Check dependencies
     if (typeof $ === 'undefined') {
-        console.error('jQuery is not loaded! Make sure to include jQuery before this script.');
+        console.error('jQuery is not loaded!');
         showError('jQuery is not loaded');
         return;
     }
 
-    // Check if Chart.js is loaded
     if (typeof Chart === 'undefined') {
-        console.error('Chart.js is not loaded! Make sure to include Chart.js before this script.');
+        console.error('Chart.js is not loaded!');
         showError('Chart.js is not loaded');
         return;
     }
 
+    // Event listeners
     $('#timeFilter').change(function() {
         let months = $(this).val();
         console.log('Time filter changed to:', months);
@@ -356,124 +484,120 @@
     fetchChartData();
 });
 
- document.addEventListener('DOMContentLoaded', function () {
-            function fetchFeedbackChart(months = 12) {
-                $.ajax({
-                    url: "/feedback/chart-data",
-                    type: "GET",
-                    data: { months: months },
-                    success: function (data) {
-                        console.log('Chart data received:', data); // Debug log
-                        
-                        let labels = data.map(item => item.month);
-                        let ratings = [1, 2, 3, 4, 5]; // Star ratings
-                        let ratingCounts = ratings.map(rating => data.map(item => item.ratings[rating] || 0));
+// Feedback Chart Logic
+document.addEventListener('DOMContentLoaded', function () {
+    function fetchFeedbackChart(months = 12) {
+        $.ajax({
+            url: "/feedback/chart-data",
+            type: "GET",
+            data: { months: months },
+            success: function (data) {
+                console.log('Chart data received:', data);
+                
+                let labels = data.map(item => item.month);
+                let ratings = [1, 2, 3, 4, 5];
+                let ratingCounts = ratings.map(rating => data.map(item => item.ratings[rating] || 0));
 
-                        let ctx = document.getElementById("feedbackChart").getContext("2d");
+                let ctx = document.getElementById("feedbackChart").getContext("2d");
 
-                        // Destroy previous chart instance if it exists
-                        if (window.feedbackChartInstance) {
-                            window.feedbackChartInstance.destroy();
-                        }
+                if (window.feedbackChartInstance) {
+                    window.feedbackChartInstance.destroy();
+                }
 
-                        window.feedbackChartInstance = new Chart(ctx, {
-                            type: 'bar',
-                            data: {
-                                labels: labels,
-                                datasets: ratings.map((rating, index) => ({
-                                    label: `${rating}-Star Ratings`,
-                                    data: ratingCounts[index],
-                                    backgroundColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 0.6)`, 
-                                    borderColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 1)`,
-                                    borderWidth: 1,
-                                    maxBarThickness: 60
-                                }))
-                            },
-                            options: {
-                                responsive: true,
-                                maintainAspectRatio: false,
-                                plugins: {
-                                    legend: {
-                                        display: true,
-                                        position: 'top',
-                                        align: 'center',
-                                        labels: {
-                                            boxWidth: 15,
-                                            padding: 10
-                                        }
-                                    }
-                                },
-                                scales: {
-                                    y: { 
-                                        beginAtZero: true, 
-                                        stacked: true,
-                                        ticks: {
-                                            stepSize: 1,
-                                            callback: function(value) {
-                                                if (Number.isInteger(value)) {
-                                                    return value;
-                                                }
-                                            }
-                                        }
-                                    },
-                                    x: {
-                                        stacked: true,
-                                        categoryPercentage: 0.8,
-                                        barPercentage: 0.9,
-                                        ticks: {
-                                            callback: function(value, index) {
-                                                let date = new Date(labels[index] + "-01");
-                                                return date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
-                                            }
+                window.feedbackChartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: ratings.map((rating, index) => ({
+                            label: `${rating}-Star Ratings`,
+                            data: ratingCounts[index],
+                            backgroundColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 0.6)`, 
+                            borderColor: `rgba(${index * 50}, ${255 - index * 50}, 200, 1)`,
+                            borderWidth: 1,
+                            maxBarThickness: 60
+                        }))
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: true,
+                                position: 'top',
+                                align: 'center',
+                                labels: {
+                                    boxWidth: 15,
+                                    padding: 10
+                                }
+                            }
+                        },
+                        scales: {
+                            y: { 
+                                beginAtZero: true, 
+                                stacked: true,
+                                ticks: {
+                                    stepSize: 1,
+                                    callback: function(value) {
+                                        if (Number.isInteger(value)) {
+                                            return value;
                                         }
                                     }
                                 }
+                            },
+                            x: {
+                                stacked: true,
+                                categoryPercentage: 0.8,
+                                barPercentage: 0.9,
+                                ticks: {
+                                    callback: function(value, index) {
+                                        let date = new Date(labels[index] + "-01");
+                                        return date.toLocaleString('en-US', { month: 'short', year: 'numeric' });
+                                    }
+                                }
                             }
-                        });
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error fetching chart data:', error);
+                        }
                     }
                 });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error fetching chart data:', error);
             }
+        });
+    }
 
-            fetchFeedbackChart();
+    fetchFeedbackChart();
 
-
-
-     $('#timeFilter').change(function() {
+    // Fix the feedback time filter to use the correct ID
+    $('#feedbackTimeFilter').change(function() {
         let months = $(this).val();
-        console.log('Time filter changed to:', months);
+        console.log('Feedback time filter changed to:', months);
         fetchFeedbackChart(months);
     });
-
 });
 
+// User Types Chart Logic
 document.addEventListener('DOMContentLoaded', function() {
-    // User Types Donut Chart
     const userTypesCtx = document.getElementById('userTypesChart').getContext('2d');
     
     const studentsCount = {{ \App\Models\User::where('role', 'student')->count() }};
     const facultyCount = {{ \App\Models\User::where('role', 'faculty')->count() }};
     const totalUsers = studentsCount + facultyCount;
     
-    // Calculate percentages
     const studentPercentage = totalUsers > 0 ? Math.round((studentsCount / totalUsers) * 100) : 0;
     const facultyPercentage = totalUsers > 0 ? Math.round((facultyCount / totalUsers) * 100) : 0;
     
-    // Update percentage displays
     document.getElementById('studentPercentage').textContent = studentPercentage + '%';
     document.getElementById('facultyPercentage').textContent = facultyPercentage + '%';
     
-    new Chart(userTypesCtx, {
+    userTypesChart = new Chart(userTypesCtx, {
         type: 'doughnut',
         data: {
             labels: ['Students', 'Faculty'],
             datasets: [{
                 data: [studentsCount, facultyCount],
                 backgroundColor: [
-                    'rgba(34, 197, 94, 0.8)',   // Green for students
-                    'rgba(147, 51, 234, 0.8)'   // Purple for faculty
+                    'rgba(34, 197, 94, 0.8)',
+                    'rgba(147, 51, 234, 0.8)'
                 ],
                 borderColor: [
                     'rgba(34, 197, 94, 1)',
@@ -491,7 +615,7 @@ document.addEventListener('DOMContentLoaded', function() {
             maintainAspectRatio: false,
             plugins: {
                 legend: {
-                    display: false // We're using custom legend on the right
+                    display: false
                 },
                 tooltip: {
                     callbacks: {
@@ -504,7 +628,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             },
-            cutout: '60%', // Makes it a donut chart
+            cutout: '60%',
             animation: {
                 animateRotate: true,
                 animateScale: true
@@ -512,8 +636,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
-
-
-
 </script>
+
+</div>
 @endsection
+@section('scripts')
