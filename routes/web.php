@@ -147,4 +147,10 @@ Route::get('users/students/{id}', action: [UserController::class, 'show'])->name
 Route::put('users/students', [UserController::class, 'update'])->name('dashboard.users.students.update');
 
 
+
+//Appointment Export
+Route::get('/appointments/export', [App\Http\Controllers\ConfirmedAppointmentExportController::class, 'export'])->name('confirmedappointments.export');
+
+
+
 ?>
