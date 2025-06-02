@@ -3,28 +3,64 @@
         <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search bookings..." class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
     </div>
 
-        {{-- Filter Dates --}}
-    <div class="flex items-center gap-4 mb-4">
-        <input type="date" wire:model="tempDateFilter" class="px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white-900 text-black-900">
+   {{-- Date Range Filter --}}
+    <div class="bg-white-800 p-4 rounded-lg mb-4">
+        <h3 class="text-black text-lg mb-3">Date Range Filter</h3>
+        <div class="flex flex-wrap items-center gap-4">
+            <div class="flex flex-col">
+                <label for="dateFrom" class="black-gray-300 text-sm mb-1">From Date</label>
+                <input 
+                    type="date" 
+                    id="dateFrom"
+                    wire:model="tempDateFromFilter" 
+                    class="px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white-900 text-black"
+                >
+            </div>
+            
+            <div class="flex flex-col">
+                <label for="dateTo" class="black-gray-300 text-sm mb-1">To Date</label>
+                <input 
+                    type="date" 
+                    id="dateTo"
+                    wire:model="tempDateToFilter" 
+                    class="px-4 py-2 border border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white-900 text-black"
+                >
+            </div>
+            
+            <div class="flex items-end gap-2">
+                <button 
+                    wire:click="applyDateFilter" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors"
+                >
+                    Apply Filter
+                </button>
+                
+                @if($dateFromFilter || $dateToFilter)
+                <button 
+                    wire:click="resetDateFilter" 
+                    class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md transition-colors"
+                >
+                    Clear Filter
+                </button>
+                @endif
+            </div>
+        </div>
         
-        <button wire:click="applyDateFilter" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md">
-            Apply Filter
-        </button>
-        
-        @if($dateFilter)
-            <div class="text-gray-400">
-                Filtering by date: {{ $dateFilter }}
+        {{-- Display active filters --}}
+        @if($dateFromFilter || $dateToFilter)
+            <div class="mt-3 text-gray-300 text-sm">
+                <span class="font-semibold">Active Filter:</span>
+                @if($dateFromFilter && $dateToFilter)
+                    From {{ \Carbon\Carbon::parse($dateFromFilter)->format('M d, Y') }} 
+                    to {{ \Carbon\Carbon::parse($dateToFilter)->format('M d, Y') }}
+                @elseif($dateFromFilter)
+                    From {{ \Carbon\Carbon::parse($dateFromFilter)->format('M d, Y') }} onwards
+                @elseif($dateToFilter)
+                    Up to {{ \Carbon\Carbon::parse($dateToFilter)->format('M d, Y') }}
+                @endif
             </div>
         @endif
-        
-        @if($dateFilter)
-        <button wire:click="resetDateFilter" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded-md">
-            Clear Filter
-        </button>
-        @endif
-
     </div>
-
     <div class="flex items-center gap-4 mb-4">
         <div class="bg-white shadow-md rounded-lg px-3 py-2 h-55 flex items-center w-full">
             <div class="mr-2">

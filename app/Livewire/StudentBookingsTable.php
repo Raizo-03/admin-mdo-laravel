@@ -17,8 +17,13 @@ class StudentBookingsTable extends Component
     public $selectedBooking = null;
     public $showStatusModal = false;
     public $newStatus = '';
-    public $dateFilter = '';
-    public $tempDateFilter = '';
+    
+    // Date range filter properties (updated from single date filter)
+    public $dateFromFilter = '';
+    public $dateToFilter = '';
+    public $tempDateFromFilter = '';
+    public $tempDateToFilter = '';
+    public $debugInfo = '';
     
     protected $listeners = ['loadStudentBookings' => 'setStudentEmail'];
 
@@ -52,13 +57,30 @@ class StudentBookingsTable extends Component
             $query = Appointment::where('umak_email', $this->studentEmail)
                 ->where('status', 'Completed');
 
-            // Apply date filter to count as well
-            if ($this->dateFilter) {
+            // Apply date range filter to count as well
+            if ($this->dateFromFilter && $this->dateToFilter) {
                 try {
-                    $filterDate = Carbon::parse($this->dateFilter)->format('Y-m-d');
-                    $query->whereDate('booking_date', $filterDate);
+                    $fromDate = Carbon::parse($this->dateFromFilter)->format('Y-m-d');
+                    $toDate = Carbon::parse($this->dateToFilter)->format('Y-m-d');
+                    $query->whereBetween('booking_date', [$fromDate, $toDate]);
                 } catch (\Exception $e) {
-                    // If date parsing fails, ignore the filter
+                    // Handle date parsing error silently
+                }
+            } elseif ($this->dateFromFilter) {
+                // Only from date provided
+                try {
+                    $fromDate = Carbon::parse($this->dateFromFilter)->format('Y-m-d');
+                    $query->whereDate('booking_date', '>=', $fromDate);
+                } catch (\Exception $e) {
+                    // Handle date parsing error silently
+                }
+            } elseif ($this->dateToFilter) {
+                // Only to date provided
+                try {
+                    $toDate = Carbon::parse($this->dateToFilter)->format('Y-m-d');
+                    $query->whereDate('booking_date', '<=', $toDate);
+                } catch (\Exception $e) {
+                    // Handle date parsing error silently
                 }
             }
 
@@ -80,14 +102,30 @@ class StudentBookingsTable extends Component
                              ->orWhere('remarks', 'like', '%' . $this->search . '%');
                 });
 
-            // Apply date filter if set
-            if ($this->dateFilter) {
+            // Apply date range filter
+            if ($this->dateFromFilter && $this->dateToFilter) {
                 try {
-                    $filterDate = Carbon::parse($this->dateFilter)->format('Y-m-d');
-                    $query->whereDate('booking_date', $filterDate);
+                    $fromDate = Carbon::parse($this->dateFromFilter)->format('Y-m-d');
+                    $toDate = Carbon::parse($this->dateToFilter)->format('Y-m-d');
+                    $query->whereBetween('booking_date', [$fromDate, $toDate]);
                 } catch (\Exception $e) {
-                    // If date parsing fails, ignore the filter for this render
-                    // You could also set an error message here if needed
+                    // Handle date parsing error silently
+                }
+            } elseif ($this->dateFromFilter) {
+                // Only from date provided
+                try {
+                    $fromDate = Carbon::parse($this->dateFromFilter)->format('Y-m-d');
+                    $query->whereDate('booking_date', '>=', $fromDate);
+                } catch (\Exception $e) {
+                    // Handle date parsing error silently
+                }
+            } elseif ($this->dateToFilter) {
+                // Only to date provided
+                try {
+                    $toDate = Carbon::parse($this->dateToFilter)->format('Y-m-d');
+                    $query->whereDate('booking_date', '<=', $toDate);
+                } catch (\Exception $e) {
+                    // Handle date parsing error silently
                 }
             }
 
@@ -102,66 +140,60 @@ class StudentBookingsTable extends Component
         ]);
     }
 
-    // Date Filter Functionality
+    // Date Range Filter Functionality
     public function applyDateFilter()
     {
         try {
-            if ($this->tempDateFilter) {
-                // Validate the date format
-                $validatedDate = Carbon::parse($this->tempDateFilter)->format('Y-m-d');
+            // Validate that from date is not later than to date
+            if ($this->tempDateFromFilter && $this->tempDateToFilter) {
+                $fromDate = Carbon::parse($this->tempDateFromFilter);
+                $toDate = Carbon::parse($this->tempDateToFilter);
                 
-                // Update filter with validated date
-                $this->dateFilter = $validatedDate;
-                
-                // Reset pagination to first page
-                $this->resetPage();
-                
-                // Update bookings count
-                $this->updateBookingsCount();
-                
-            } else {
-                // If no date selected, clear the filter
-                $this->resetDateFilter();
+                if ($fromDate->gt($toDate)) {
+                    $this->dispatch('showAlert', [
+                        'type' => 'error',
+                        'title' => 'Invalid Date Range!',
+                        'text' => 'From date cannot be later than To date.'
+                    ]);
+                    return;
+                }
             }
+            
+            // Apply the filters
+            $this->dateFromFilter = $this->tempDateFromFilter;
+            $this->dateToFilter = $this->tempDateToFilter;
+            
+            $this->resetPage(); // Reset pagination to first page
+            $this->updateBookingsCount(); // Update count with new filters
+            
         } catch (\Exception $e) {
-            // Handle invalid date format
-            $this->addError('dateFilter', 'Invalid date format. Please select a valid date.');
-            $this->tempDateFilter = '';
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'title' => 'Error!',
+                'text' => 'Invalid date format. Please check your dates.'
+            ]);
         }
     }
     
     public function resetDateFilter()
     {
-        $this->dateFilter = '';
-        $this->tempDateFilter = '';
-        
-        // Reset pagination to first page
-        $this->resetPage();
-        
-        // Update bookings count
-        $this->updateBookingsCount();
-        
-        // Clear any date-related errors
-        $this->resetErrorBag('dateFilter');
+        $this->dateFromFilter = '';
+        $this->dateToFilter = '';
+        $this->tempDateFromFilter = '';
+        $this->tempDateToFilter = '';
+        $this->resetPage(); // Reset pagination to first page
+        $this->updateBookingsCount(); // Update count after clearing filters
     }
 
-    // Optional: Add a method to handle date filter changes in real-time
-    public function updatedTempDateFilter()
-    {
-        // Automatically apply filter when date is selected
-        if ($this->tempDateFilter) {
-            $this->applyDateFilter();
-        }
-    }
-
-    // Optional: Clear filters method
+    // Optional: Clear all filters method
     public function clearAllFilters()
     {
         $this->search = '';
-        $this->dateFilter = '';
-        $this->tempDateFilter = '';
+        $this->dateFromFilter = '';
+        $this->dateToFilter = '';
+        $this->tempDateFromFilter = '';
+        $this->tempDateToFilter = '';
         $this->resetPage();
         $this->updateBookingsCount();
-        $this->resetErrorBag();
     }
 }

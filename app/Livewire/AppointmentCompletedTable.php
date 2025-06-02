@@ -20,10 +20,11 @@ class AppointmentCompletedTable extends Component
     public $showStatusModal = false;
     public $newStatus = '';
 
-    public $dateFilter = '';
-
-
-    public $tempDateFilter = '';
+    // Date range filter properties
+    public $dateFromFilter = '';
+    public $dateToFilter = '';
+    public $tempDateFromFilter = '';
+    public $tempDateToFilter = '';
     public $debugInfo = '';
     
     public $selectedAppointment = null;
@@ -77,8 +78,8 @@ class AppointmentCompletedTable extends Component
     public function render()
     {
         try {
-            // Fetch confirmed appointments with search functionality and date filter
-            $query = Appointment::where('status', 'Completed'); // Only approved appointments
+            // Fetch completed appointments with search functionality and date range filter
+            $query = Appointment::where('status', 'Completed'); // Only completed appointments
             
             // Apply search filter
             if ($this->search) {
@@ -91,14 +92,33 @@ class AppointmentCompletedTable extends Component
                 });
             }
             
-            // Apply date filter using Carbon
-            if ($this->dateFilter) {
+            // Apply date range filter
+            if ($this->dateFromFilter && $this->dateToFilter) {
                 try {
-                    $filterDate = Carbon::parse($this->dateFilter)->format('Y-m-d');
-                    $query->whereDate('booking_date', $filterDate);
+                    $fromDate = Carbon::parse($this->dateFromFilter)->format('Y-m-d');
+                    $toDate = Carbon::parse($this->dateToFilter)->format('Y-m-d');
+                    $query->whereBetween('booking_date', [$fromDate, $toDate]);
                 } catch (\Exception $e) {
+                    // Handle date parsing error silently
+                }
+            } elseif ($this->dateFromFilter) {
+                // Only from date provided
+                try {
+                    $fromDate = Carbon::parse($this->dateFromFilter)->format('Y-m-d');
+                    $query->whereDate('booking_date', '>=', $fromDate);
+                } catch (\Exception $e) {
+                    // Handle date parsing error silently
+                }
+            } elseif ($this->dateToFilter) {
+                // Only to date provided
+                try {
+                    $toDate = Carbon::parse($this->dateToFilter)->format('Y-m-d');
+                    $query->whereDate('booking_date', '<=', $toDate);
+                } catch (\Exception $e) {
+                    // Handle date parsing error silently
                 }
             }
+            
             $appointments = $query->orderBy('booking_date', 'desc')
                                 ->paginate(10);
             
@@ -116,28 +136,41 @@ class AppointmentCompletedTable extends Component
     public function applyDateFilter()
     {
         try {
-            if ($this->tempDateFilter) {
-                // Store current value for debugging
-                $oldValue = $this->dateFilter;
+            // Validate that from date is not later than to date
+            if ($this->tempDateFromFilter && $this->tempDateToFilter) {
+                $fromDate = Carbon::parse($this->tempDateFromFilter);
+                $toDate = Carbon::parse($this->tempDateToFilter);
                 
-                // Update filter
-                $this->dateFilter = $this->tempDateFilter;
-                
-                // $this->debugInfo = "Filter changed from: " . $oldValue . " to: " . $this->dateFilter;
-                $this->resetPage(); // Reset pagination to first page
-            } else {
-                $this->debugInfo = "No date selected in tempDateFilter";
+                if ($fromDate->gt($toDate)) {
+                    $this->dispatch('showAlert', [
+                        'type' => 'error',
+                        'title' => 'Invalid Date Range!',
+                        'text' => 'From date cannot be later than To date.'
+                    ]);
+                    return;
+                }
             }
+            
+            // Apply the filters
+            $this->dateFromFilter = $this->tempDateFromFilter;
+            $this->dateToFilter = $this->tempDateToFilter;
+            
+            $this->resetPage(); // Reset pagination to first page
         } catch (\Exception $e) {
-            $this->debugInfo = "Apply filter error: " . $e->getMessage();
+            $this->dispatch('showAlert', [
+                'type' => 'error',
+                'title' => 'Error!',
+                'text' => 'Invalid date format. Please check your dates.'
+            ]);
         }
     }
     
     public function resetDateFilter()
     {
-        $this->dateFilter = '';
-        $this->tempDateFilter = '';
-        // $this->debugInfo = "Filter reset";
+        $this->dateFromFilter = '';
+        $this->dateToFilter = '';
+        $this->tempDateFromFilter = '';
+        $this->tempDateToFilter = '';
         $this->resetPage(); // Reset pagination to first page
     }
 
