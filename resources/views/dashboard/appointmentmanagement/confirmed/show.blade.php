@@ -109,7 +109,7 @@
                         <input type="number" step="0.01" name="weight_kg" value="{{ old('weight_kg', optional($appointment->vitalSigns)->weight_kg) }}" class="w-full border rounded p-2" required>
                     </div>
                     <div>
-                        <label class="block text-gray-600">Blood Pressure</label>
+                        <label class="block text-gray-600">Blood Pressure (mmHG) </label>
                         <input type="text" name="blood_pressure" value="{{ old('blood_pressure', optional($appointment->vitalSigns)->blood_pressure) }}" class="w-full border rounded p-2" required>
                     </div>
                     <div>
